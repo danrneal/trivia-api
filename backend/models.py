@@ -19,7 +19,7 @@ def setup_db(app, database_path=database_path):
     db.create_all()
 
 
-class Question(db.Model):  
+class Question(db.Model):
     '''
     Question
     '''
@@ -40,7 +40,7 @@ class Question(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-  
+
     def update(self):
         db.session.commit()
 
@@ -58,7 +58,7 @@ class Question(db.Model):
         }
 
 
-class Category(db.Model):  
+class Category(db.Model):
     '''
     Category
     '''
