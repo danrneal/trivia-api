@@ -13,7 +13,9 @@ def create_app(test_config=None):
   setup_db(app)
   
   '''
-  @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+  @TODO:
+  Set up CORS. Allow '*' for origins. Delete the sample route after completing
+  the TODOs
   '''
 
   '''
@@ -36,16 +38,17 @@ def create_app(test_config=None):
 
   TEST: At this point, when you start the application
   you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
+  ten questions per page and pagination at the bottom of the screen for three
+  pages. Clicking on the page numbers should update the questions. 
   '''
 
   '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
 
-  TEST: When you click the trash icon next to a question, the question will be removed.
-  This removal will persist in the database and when you refresh the page. 
+  TEST: When you click the trash icon next to a question, the question will be
+  removed. This removal will persist in the database and when you refresh the
+  page. 
   '''
 
   '''
