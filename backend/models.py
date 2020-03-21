@@ -1,13 +1,13 @@
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
-database_name = "trivia"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+DB_NAME = "trivia"
+DB_PATH = "postgres://{}/{}".format('localhost:5432', DB_NAME)
 
 db = SQLAlchemy()
 
 
-def setup_db(app, database_path=database_path):
+def setup_db(app, database_path=DB_PATH):
     '''
     setup_db(app)
         binds a flask application and a SQLAlchemy service
