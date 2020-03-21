@@ -26,7 +26,6 @@ class TriviaTestCase(unittest.TestCase):
 
     def tearDown(self):
         """Executed after reach test"""
-        pass
 
     """
     TODO
