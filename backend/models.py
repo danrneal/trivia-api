@@ -65,13 +65,13 @@ class Category(db.Model):
     __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True)
-    type = Column(String)
+    name = Column(String)
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, name):
+        self.name = name
 
     def format(self):
         return {
             'id': self.id,
-            'type': self.type
+            'name': self.name
         }
