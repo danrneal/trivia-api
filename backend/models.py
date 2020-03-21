@@ -1,6 +1,4 @@
-import json
-import os
-from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
 database_name = "trivia"
