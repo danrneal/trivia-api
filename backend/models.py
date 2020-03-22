@@ -1,3 +1,18 @@
+"""Model objects used to model data for the db
+
+Attributes:
+    DB_DIALECT: A str representing the dialect of the db
+    DB_HOST: A str representing the host of the db
+    DB_PORT: An int representing the port the db is running on
+    DB_NAME: A str representing the db in which to connect to
+    DB_PATH: A str representing the location of the db
+    db: A SQLAlchemy service
+
+Classes:
+    Question()
+    Category()
+"""
+
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
@@ -12,9 +27,11 @@ db = SQLAlchemy()
 
 
 def setup_db(app, database_path=DB_PATH):
-    '''
-    setup_db(app)
-        binds a flask application and a SQLAlchemy service
+    '''Binds a flask application and a SQLAlchemy service
+
+    Args:
+        app: A flask app
+        database_path: A str representing the location of the db
     '''
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -24,9 +41,16 @@ def setup_db(app, database_path=DB_PATH):
 
 
 class Question(db.Model):
+    '''A model representing a trivia question
+
+    Attributes:
+        id: An int that serves as the unique identifier for a question
+        question: A str representing the content of the question
+        answer: A str representing the answer to the question
+        category: A str representing the category of the question
+        difficulty: An int representing the difficulty of the question
     '''
-    Question
-    '''
+
     __tablename__ = 'questions'
 
     id = Column(Integer, primary_key=True)
@@ -42,29 +66,41 @@ class Question(db.Model):
         self.difficulty = difficulty
 
     def insert(self):
+        """Inserts a new question object into the db"""
         db.session.add(self)
         db.session.commit()
 
     def update(self):
+        """Updates an existing question object in the db"""
         db.session.commit()
 
     def delete(self):
+        """Deletes an existing question object from the db"""
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
-        return {
+        """Formats the question object as a dict
+
+        Returns:
+            question: A dict representing the question object
+        """
+        question = {
             'id': self.id,
             'question': self.question,
             'answer': self.answer,
             'category': self.category,
             'difficulty': self.difficulty
         }
+        return question
 
 
 class Category(db.Model):
-    '''
-    Category
+    '''A model representing a category of trivia questions
+
+    Attributes:
+        id: An int that serves as the unique identifier for a category
+        name: A str representing the name of the category
     '''
     __tablename__ = 'categories'
 
@@ -75,7 +111,13 @@ class Category(db.Model):
         self.name = name
 
     def format(self):
-        return {
+        """Formats the category object as a dict
+
+        Returns:
+            category: A dict representing the category object
+        """
+        category = {
             'id': self.id,
             'name': self.name
         }
+        return category
