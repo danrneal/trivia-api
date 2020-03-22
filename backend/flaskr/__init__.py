@@ -7,8 +7,6 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
-
-# create and configure the app
 app = Flask(__name__)
 setup_db(app)
 CORS(app)
