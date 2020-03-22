@@ -11,9 +11,27 @@ app = Flask(__name__)
 setup_db(app)
 CORS(app)
 
-'''
-@TODO: Use the after_request decorator to set Access-Control-Allow
-'''
+
+@app.after_request
+def after_request(response):
+    """Adds response headers after request
+
+    Args:
+        response: The response object to add headers to
+
+    Returns:
+        response: The response object that the headers were added to
+    """
+
+    response.headers.add(
+        'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
+    )
+    response.headers.add(
+        'Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS'
+    )
+
+    return response
+
 
 '''
 @TODO:
