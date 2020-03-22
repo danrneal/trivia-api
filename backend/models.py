@@ -13,7 +13,8 @@ Classes:
     Category()
 """
 
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 
 DB_DIALECT = 'postgresql'
@@ -47,7 +48,7 @@ class Question(db.Model):
         id: An int that serves as the unique identifier for a question
         question: A str representing the content of the question
         answer: A str representing the answer to the question
-        category: A str representing the category of the question
+        category_id: The id of the category that the question belongs to
         difficulty: An int representing the difficulty of the question
     '''
 
@@ -56,13 +57,13 @@ class Question(db.Model):
     id = Column(Integer, primary_key=True)
     question = Column(String)
     answer = Column(String)
-    category = Column(String)
+    category_id = Column(Integer, ForeignKey('categories.id'))
     difficulty = Column(Integer)
 
-    def __init__(self, question, answer, category, difficulty):
+    def __init__(self, question, answer, category_id, difficulty):
         self.question = question
         self.answer = answer
-        self.category = category
+        self.category_id = category_id
         self.difficulty = difficulty
 
     def insert(self):
@@ -89,7 +90,7 @@ class Question(db.Model):
             'id': self.id,
             'question': self.question,
             'answer': self.answer,
-            'category': self.category,
+            'category': self.category.name,
             'difficulty': self.difficulty
         }
         return question
@@ -102,13 +103,16 @@ class Category(db.Model):
         id: An int that serves as the unique identifier for a category
         name: A str representing the name of the category
     '''
+
     __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    questions = relationship('Question', backref='category')
 
-    def __init__(self, name):
+    def __init__(self, name, questions):
         self.name = name
+        self.questions = questions
 
     def format(self):
         """Formats the category object as a dict
@@ -118,6 +122,7 @@ class Category(db.Model):
         """
         category = {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'questions': self.questions
         }
         return category
