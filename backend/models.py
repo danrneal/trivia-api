@@ -1,8 +1,12 @@
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
+DB_DIALECT = 'postgresql'
+DB_HOST = 'localhost'
+DB_PORT = 5432
 DB_NAME = "trivia"
-DB_PATH = "postgres://{}/{}".format('localhost:5432', DB_NAME)
+
+DB_PATH = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 db = SQLAlchemy()
 
