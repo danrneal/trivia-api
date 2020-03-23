@@ -169,8 +169,9 @@ def get_category_questions(category_id):
         response: A json object representing questions for a specific category
     """
 
-    questions = Question.query.filter_by(category_id=category_id)
-    questions = questions.order_by(Question.id).all()
+    questions = Question.query.filter(
+        Question.category_id == category_id
+    ).order_by(Question.id).all()
     page = request.args.get('page', 1, type=int)
     current_questions = paginate_questions(questions, page)
 
