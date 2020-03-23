@@ -58,7 +58,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertIsNone(response.json.get('current_category_id'))
         self.assertTrue(response.json.get('categories'))
 
-    def test_search_questions_no_results(self):
+    def test_search_questions_no_results_success(self):
         """Test a search of questions that returned no results"""
 
         search = {
