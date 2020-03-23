@@ -41,6 +41,40 @@ class QuestionTestCase(unittest.TestCase):
         self.assertIsNone(response.json.get('current_category_id'))
         self.assertTrue(response.json.get('categories'))
 
+    def test_search_questions_success(self):
+        """Test successful search of questions"""
+
+        search = {
+            'searchTerm': 'what',
+        }
+
+        response = self.client().post('/questions', json=search)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertIsNone(response.json.get('created_question_id'))
+        self.assertTrue(response.json.get('questions'))
+        self.assertTrue(response.json.get('total_questions'))
+        self.assertIsNone(response.json.get('current_category_id'))
+        self.assertTrue(response.json.get('categories'))
+
+    def test_search_questions_no_results(self):
+        """Test a search of questions that returned no results"""
+
+        search = {
+            'searchTerm': 'M155P311ED'
+        }
+
+        response = self.client().post('/questions', json=search)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertIsNone(response.json.get('created_question_id'))
+        self.assertEqual(response.json.get('questions'), [])
+        self.assertEqual(response.json.get('total_questions'), 0)
+        self.assertIsNone(response.json.get('current_category_id'))
+        self.assertTrue(response.json.get('categories'))
+
     def test_create_question_success(self):
         """Test successful creation of question"""
 
