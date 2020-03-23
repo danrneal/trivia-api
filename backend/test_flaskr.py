@@ -6,7 +6,7 @@ Classes:
 
 import unittest
 from flaskr import app
-from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db
+from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Question
 
 
 class QuestionTestCase(unittest.TestCase):
@@ -93,8 +93,7 @@ class QuestionTestCase(unittest.TestCase):
     def test_delete_question_success(self):
         """Test successful deletion of question"""
 
-        response = self.client().get('/questions')
-        question_id = response.json.get('questions')[0]['id']
+        question_id = Question.query.order_by(Question.id.desc()).first().id
         response = self.client().delete(f'/questions/{question_id}')
 
         self.assertEqual(response.status_code, 200)
@@ -134,15 +133,13 @@ class CategoryTestCase(unittest.TestCase):
     def test_get_category_questions_success(self):
         """Test successful retrieval of questions from a category"""
 
-        response = self.client().get('/categories')
-        category_id = int(list(response.json.get('categories').keys())[0])
-        response = self.client().get(f'/categories/{category_id}/questions')
+        response = self.client().get('/categories/1/questions')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json.get('success'), True)
         self.assertTrue(response.json.get('questions'))
         self.assertTrue(response.json.get('total_questions'))
-        self.assertEqual(response.json.get('current_category_id'), category_id)
+        self.assertEqual(response.json.get('current_category_id'), 1)
         self.assertTrue(response.json.get('categories'))
 
 
