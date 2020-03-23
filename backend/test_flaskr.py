@@ -143,5 +143,76 @@ class CategoryTestCase(unittest.TestCase):
         self.assertTrue(response.json.get('categories'))
 
 
+class QuizTestCase(unittest.TestCase):
+    """This class represents the test cases for the quiz endpoints
+
+    Attributes:
+        app: A flask app from the flaskr app
+        client: A test client for the flask app to while testing
+        db_name: A str representing the name of the test database
+        db_path: A str representing the location of the test database
+    """
+
+    def setUp(self):
+        self.app = app
+        self.client = self.app.test_client
+        self.db_name = 'trivia_test'
+        self.db_path = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{self.db_name}'
+        setup_db(self.app, self.db_path)
+
+    def tearDown(self):
+        """Executed after each test"""
+
+    def test_create_quiz_success(self):
+        """Test the successful creation of a quiz"""
+
+        questions = Question.query.filter(Question.category_id == 1).all()
+        question_ids = [question.id for question in questions]
+        question_id = question_ids.pop()
+
+        quiz = {
+            'quiz_category_id': 1,
+            'previous_question_ids': question_ids,
+        }
+
+        response = self.client().post('/quizzes', json=quiz)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertTrue(response.json.get('question'))
+        self.assertEqual(response.json.get('question')['id'], question_id)
+
+    def test_create_quiz_no_category_success(self):
+        """Test the successful creation of a quiz without a category"""
+
+        quiz = {
+            'quiz_category_id': 0,
+            'previous_question_ids': [],
+        }
+
+        response = self.client().post('/quizzes', json=quiz)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertTrue(response.json.get('question'))
+
+    def test_create_quiz_no_question_success(self):
+        """Test the successful creation of a quiz that returned no question"""
+
+        questions = Question.query.filter(Question.category_id == 1).all()
+        question_ids = [question.id for question in questions]
+
+        quiz = {
+            'quiz_category_id': 1,
+            'previous_question_ids': question_ids,
+        }
+
+        response = self.client().post('/quizzes', json=quiz)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertIsNone(response.json.get('question'))
+
+
 if __name__ == "__main__":
     unittest.main()
