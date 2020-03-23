@@ -295,6 +295,24 @@ def not_found(error):  # pylint: disable=unused-argument
     return response, 404
 
 
+@app.errorhandler(405)
+def method_not_allowed(error):  # pylint: disable=unused-argument
+    """Error handler for 405 method not allowed
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 405,
+        'message': 'Method Not Allowed',
+    })
+    return response, 405
+
+
 @app.errorhandler(422)
 def unprocessable_entity(error):  # pylint: disable=unused-argument
     """Error handler for 422 unprocessable entity
