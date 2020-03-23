@@ -71,6 +71,17 @@ class QuestionTestCase(unittest.TestCase):
         self.assertIsNone(response.json.get('current_category_id'))
         self.assertTrue(response.json.get('categories'))
 
+    def test_delete_question_success(self):
+        """Test successful deletion of question"""
+
+        response = self.client().get('/questions')
+        question_id = response.json.get('questions')[0]['id']
+        response = self.client().delete(f'/questions/{question_id}')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertEqual(response.json.get('deleted_question_id'), question_id)
+
 
 if __name__ == "__main__":
     unittest.main()
