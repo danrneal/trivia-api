@@ -9,8 +9,8 @@ class QuizView extends Component {
   constructor(props){
     super();
     this.state = {
-        quizCategory: null,
-        previousQuestions: [], 
+        quizCategoryId: null,
+        previousQuestionIds: [],
         showAnswer: false,
         categories: {},
         numCorrect: 0,
@@ -35,8 +35,8 @@ class QuizView extends Component {
     })
   }
 
-  selectCategory = ({name, id=0}) => {
-    this.setState({quizCategory: {name, id}}, this.getNextQuestion)
+  selectCategory = ({id=0}) => {
+    this.setState({quizCategoryId: id}, this.getNextQuestion)
   }
 
   handleChange = (event) => {
@@ -44,8 +44,8 @@ class QuizView extends Component {
   }
 
   getNextQuestion = () => {
-    const previousQuestions = [...this.state.previousQuestions]
-    if(this.state.currentQuestion.id) { previousQuestions.push(this.state.currentQuestion.id) }
+    const previousQuestionIds = [...this.state.previousQuestionIds]
+    if(this.state.currentQuestion.id) { previousQuestionIds.push(this.state.currentQuestion.id) }
 
     $.ajax({
       url: '/quizzes', //TODO: update request URL
@@ -53,8 +53,8 @@ class QuizView extends Component {
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
-        previous_questions: previousQuestions,
-        quiz_category: this.state.quizCategory
+        previous_question_ids: previousQuestionIds,
+        quiz_category_id: this.state.quizCategoryId
       }),
       xhrFields: {
         withCredentials: true
@@ -63,7 +63,7 @@ class QuizView extends Component {
       success: (result) => {
         this.setState({
           showAnswer: false,
-          previousQuestions: previousQuestions,
+          previousQuestionIds: previousQuestionIds,
           currentQuestion: result.question,
           guess: '',
           forceEnd: result.question ? false : true
@@ -89,8 +89,8 @@ class QuizView extends Component {
 
   restartGame = () => {
     this.setState({
-      quizCategory: null,
-      previousQuestions: [], 
+      quizCategoryId: null,
+      previousQuestionIds: [],
       showAnswer: false,
       numCorrect: 0,
       currentQuestion: {},
@@ -111,7 +111,7 @@ class QuizView extends Component {
                       key={id}
                       value={id}
                       className="play-category"
-                      onClick={() => this.selectCategory({name:this.state.categories[id], id})}>
+                      onClick={() => this.selectCategory({id})}>
                       {this.state.categories[id]}
                     </div>
                   )
@@ -150,7 +150,7 @@ class QuizView extends Component {
   }
 
   renderPlay(){
-    return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
+    return this.state.previousQuestionIds.length === questionsPerPlay || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer 
         ? this.renderCorrectAnswer()
@@ -167,7 +167,7 @@ class QuizView extends Component {
 
 
   render() {
-    return this.state.quizCategory
+    return this.state.quizCategoryId != null
         ? this.renderPlay()
         : this.renderPrePlay()
   }
