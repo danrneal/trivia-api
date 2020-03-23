@@ -38,6 +38,20 @@ class CategoryTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), True)
         self.assertTrue(response.json.get('categories'))
 
+    def test_get_category_questions_success(self):
+        """Test successful retrieval of questions from a category"""
+
+        response = self.client().get('/categories')
+        category_id = int(list(response.json.get('categories').keys())[0])
+        response = self.client().get(f'/categories/{category_id}/questions')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertTrue(response.json.get('questions'))
+        self.assertTrue(response.json.get('total_questions'))
+        self.assertEqual(response.json.get('current_category_id'), category_id)
+        self.assertTrue(response.json.get('categories'))
+
 
 class QuestionTestCase(unittest.TestCase):
     """This class represents the test cases for the question endpoints
