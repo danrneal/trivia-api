@@ -45,7 +45,7 @@ class QuestionTestCase(unittest.TestCase):
         """Test successful search of questions"""
 
         search = {
-            'searchTerm': 'what',
+            'search_term': 'what',
         }
 
         response = self.client().post('/questions', json=search)
@@ -62,7 +62,7 @@ class QuestionTestCase(unittest.TestCase):
         """Test a search of questions that returned no results"""
 
         search = {
-            'searchTerm': 'M155P311ED'
+            'search_term': 'M155P311ED'
         }
 
         response = self.client().post('/questions', json=search)
