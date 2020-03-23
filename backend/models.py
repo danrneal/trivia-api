@@ -90,7 +90,7 @@ class Question(db.Model):
             'id': self.id,
             'question': self.question,
             'answer': self.answer,
-            'category': self.category.name,
+            'category_id': self.category_id,
             'difficulty': self.difficulty
         }
         return question
@@ -123,6 +123,6 @@ class Category(db.Model):
         category = {
             'id': self.id,
             'name': self.name,
-            'questions': self.questions
+            'questions': [question.format() for question in self.questions]
         }
         return category
