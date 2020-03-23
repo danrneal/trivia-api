@@ -218,17 +218,39 @@ def get_category_questions(category_id):
     return response
 
 
-'''
-@TODO:
-Create a POST endpoint to get questions to play the quiz.
-This endpoint should take category and previous question parameters
-and return a random questions within the given category,
-if provided, and that is not one of the previous questions.
+@app.route('/quizzes', methods=['POST'])
+def create_quiz():
+    """Route handler for endpoint starting a new quiz
 
-TEST: In the "Play" tab, after a user selects "All" or a category,
-one question at a time is displayed, the user is allowed to answer
-and shown whether they were correct or not.
-'''
+    Returns:
+        response: A json object representing a random question given the
+            specified parameters
+    """
+
+    quiz_category_id = request.json.get('quiz_category_id')
+    previous_question_ids = request.json.get('previous_question_ids')
+
+    questions = Question.query.filter(~Question.id.in_(previous_question_ids))
+
+    if quiz_category_id != 0:
+        questions = questions.filter(
+            Question.category_id == quiz_category_id
+        )
+
+    questions = questions.all()
+
+    if questions:
+        question = random.choice(questions).format()
+    else:
+        question = None
+
+    response = jsonify({
+        'success': True,
+        'question': question,
+    })
+
+    return response
+
 
 '''
 @TODO:
