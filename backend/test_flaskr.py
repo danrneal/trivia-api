@@ -82,6 +82,21 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), True)
         self.assertEqual(response.json.get('deleted_question_id'), question_id)
 
+    def test_create_question_success(self):
+        """Test successful creation of question"""
+
+        new_question = {
+            'question': "What's the answer to life the universe & everything?",
+            'answer': "42",
+            'category_id': 1,
+            'difficulty': 5,
+        }
+
+        response = self.client().post('/questions', json=new_question)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+
 
 if __name__ == "__main__":
     unittest.main()
