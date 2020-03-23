@@ -91,7 +91,7 @@ def create_question():
 
     try:
 
-        search_term = request.json.get('searchTerm')
+        search_term = request.json.get('search_term')
 
         if search_term is not None:
 
