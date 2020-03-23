@@ -70,6 +70,40 @@ def get_categories():
     return response
 
 
+@app.route('/categories/<int:category_id>/questions')
+def get_category_questions(category_id):
+    """Route handler for endpoint showing all questions for a specific category
+
+    Args:
+        category_id: An int representing the identifier for a category to
+            retrieve questions for
+
+    Returns:
+        response: A json object representing questions for a specific category
+    """
+
+    questions = Question.query.filter_by(category_id=category_id)
+    questions = questions.order_by(Question.id).all()
+    page = request.args.get('page', 1, type=int)
+    current_questions = paginate_questions(questions, page)
+
+    if not current_questions:
+        abort(404)
+
+    categories = Category.query.order_by(Category.id).all()
+    categories = {category.id: category.name for category in categories}
+
+    response = jsonify({
+        'success': True,
+        'questions': current_questions,
+        'total_questions': len(questions),
+        'current_category_id': category_id,
+        'categories': categories,
+    })
+
+    return response
+
+
 @app.route('/questions', methods=['GET'])
 def get_questions():
     """Route handler for endpoint showing questions for a given page
@@ -166,15 +200,6 @@ is a substring of the question.
 TEST: Search by any phrase. The questions list will update to include
 only question that include that string within their question.
 Try using the word "title" to start.
-'''
-
-'''
-@TODO:
-Create a GET endpoint to get questions based on category.
-
-TEST: In the "List" tab / main screen, clicking on one of the
-categories in the left column will cause only questions of that
-category to be shown.
 '''
 
 '''
