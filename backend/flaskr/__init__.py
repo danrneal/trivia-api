@@ -91,22 +91,48 @@ def create_question():
 
     try:
 
-        question = Question(
-            question=request.json.get('question'),
-            answer=request.json.get('answer'),
-            category_id=request.json.get('category_id'),
-            difficulty=request.json.get('difficulty'),
-        )
+        search_term = request.json.get('searchTerm')
 
-        question.insert()
+        if search_term is not None:
+
+            questions = Question.query.filter(
+                Question.question.ilike(f'%{search_term}%')
+            ).order_by(Question.id).all()
+            page = request.args.get('page', 1, type=int)
+            current_questions = paginate_questions(questions, page)
+
+            categories = Category.query.order_by(Category.id).all()
+            categories = {
+                category.id: category.name
+                for category in categories
+            }
+
+            response = jsonify({
+                'success': True,
+                'questions': current_questions,
+                'total_questions': len(questions),
+                'current_category_id': None,
+                'categories': categories,
+            })
+
+        else:
+
+            question = Question(
+                question=request.json.get('question'),
+                answer=request.json.get('answer'),
+                category_id=request.json.get('category_id'),
+                difficulty=request.json.get('difficulty'),
+            )
+
+            question.insert()
+
+            response = jsonify({
+                'success': True,
+                'created_question_id': question.id,
+            })
 
     except AttributeError:
         abort(400)
-
-    response = jsonify({
-        'success': True,
-        'created_question_id': question.id,
-    })
 
     return response
 
@@ -191,17 +217,6 @@ def get_category_questions(category_id):
 
     return response
 
-
-'''
-@TODO:
-Create a POST endpoint to get questions based on a search term.
-It should return any questions for whom the search term
-is a substring of the question.
-
-TEST: Search by any phrase. The questions list will update to include
-only question that include that string within their question.
-Try using the word "title" to start.
-'''
 
 '''
 @TODO:
