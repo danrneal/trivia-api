@@ -39,6 +39,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), True)
         self.assertTrue(response.json.get('questions'))
         self.assertTrue(response.json.get('total_questions'))
+        self.assertIsNone(response.json.get('current_category_id'))
         self.assertTrue(response.json.get('categories'))
 
 

@@ -93,6 +93,7 @@ def get_questions():
         'success': True,
         'questions': current_questions,
         'total_questions': len(questions),
+        'current_category_id': None,
         'categories': categories,
     })
 
