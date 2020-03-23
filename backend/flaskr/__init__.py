@@ -99,14 +99,32 @@ def get_questions():
     return response
 
 
-'''
-@TODO:
-Create an endpoint to DELETE question using a question ID.
+@app.route('/questions/<int:question_id>', methods=['DELETE'])
+def delete_question(question_id):
+    """Route handler for endpoint to delete a single question
 
-TEST: When you click the trash icon next to a question, the question will
-be removed. This removal will persist in the database and when you refresh
-the page.
-'''
+    Args:
+        question_id: An int representing the identifier for a question to
+            delete
+
+    Returns:
+        response: A json object containing the id of the question that was
+            deleted
+    """
+
+    question = Question.query.get(question_id)
+    if question is None:
+        abort(422)
+
+    question.delete()
+
+    response = jsonify({
+        'success': True,
+        'deleted_question_id': question_id,
+    })
+
+    return response
+
 
 '''
 @TODO:
