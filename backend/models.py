@@ -91,7 +91,7 @@ class Question(db.Model):
             'question': self.question,
             'answer': self.answer,
             'category_id': self.category_id,
-            'difficulty': self.difficulty
+            'difficulty': self.difficulty,
         }
         return question
 
@@ -110,9 +110,8 @@ class Category(db.Model):
     name = Column(String)
     questions = relationship('Question', backref='category')
 
-    def __init__(self, name, questions):
+    def __init__(self, name):
         self.name = name
-        self.questions = questions
 
     def format(self):
         """Formats the category object as a dict
@@ -123,6 +122,5 @@ class Category(db.Model):
         category = {
             'id': self.id,
             'name': self.name,
-            'questions': [question.format() for question in self.questions]
         }
         return category
