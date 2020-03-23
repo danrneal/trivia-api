@@ -12,6 +12,24 @@ setup_db(app)
 CORS(app)
 
 
+def paginate_questions(questions, page):
+    """Retrieve questions for the current page only
+
+    Args:
+        questions: A list of Question objects
+        page: An int representing the page number to retieive questions for
+
+    Returns:
+        A list of dicts representing questions for the given page
+    """
+    questions = [question.format() for question in questions]
+    start = (page - 1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+    current_questions = questions[start:end]
+
+    return current_questions
+
+
 @app.after_request
 def after_request(response):
     """Adds response headers after request
@@ -51,6 +69,35 @@ you should see questions and categories generated,
 ten questions per page and pagination at the bottom of the screen for three
 pages. Clicking on the page numbers should update the questions.
 '''
+
+
+@app.route('/questions')
+def get_questions():
+    """Route handler for endpoint showing questions for a given page
+
+    Returns:
+        response: A json object representing questions for a given page
+    """
+
+    questions = Question.query.order_by(Question.id).all()
+    page = request.args.get('page', 1, type=int)
+    current_questions = paginate_questions(questions, page)
+
+    if not current_questions:
+        abort(404)
+
+    categories = Category.query.order_by(Category.id).all()
+    categories = [category.format() for category in categories]
+
+    response = jsonify({
+        'success': True,
+        'questions': current_questions,
+        'total_questions': len(questions),
+        'categories': categories,
+    })
+
+    return response
+
 
 '''
 @TODO:
