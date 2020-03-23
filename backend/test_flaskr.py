@@ -26,11 +26,16 @@ class QuestionTestCase(unittest.TestCase):
     def tearDown(self):
         """Executed after each test"""
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for
-    expected errors.
-    """
+    def test_get_questions_success(self):
+        """Test successful retrieval of questions"""
+
+        response = self.client().get('/questions')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertTrue(response.json.get('questions'))
+        self.assertTrue(response.json.get('total_questions'))
+        self.assertTrue(response.json.get('categories'))
 
 
 if __name__ == "__main__":
