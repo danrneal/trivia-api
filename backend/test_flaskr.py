@@ -1,4 +1,8 @@
-"""Test objects used to test the behavior of endpoints in the flaskr app"""
+"""Test objects used to test the behavior of endpoints in the flaskr app
+
+Classes:
+    QuestionTestCase()
+"""
 
 import unittest
 from flaskr import app
