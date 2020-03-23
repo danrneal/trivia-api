@@ -70,7 +70,7 @@ def get_categories():
     return response
 
 
-@app.route('/questions')
+@app.route('/questions', methods=['GET'])
 def get_questions():
     """Route handler for endpoint showing questions for a given page
 
@@ -94,6 +94,37 @@ def get_questions():
         'total_questions': len(questions),
         'current_category_id': None,
         'categories': categories,
+    })
+
+    return response
+
+
+@app.route('/questions', methods=['POST'])
+def create_question():
+    """Route handler for endpoint to create a questoin
+
+    Returns:
+        response: A json object containing the id of the question that was
+            created
+    """
+
+    try:
+
+        question = Question(
+            question=request.json.get('question'),
+            answer=request.json.get('answer'),
+            category_id=request.json.get('category_id'),
+            difficulty=request.json.get('difficulty'),
+        )
+
+        question.insert()
+
+    except AttributeError:
+        abort(400)
+
+    response = jsonify({
+        'success': True,
+        'created_question_id': question.id,
     })
 
     return response
@@ -125,17 +156,6 @@ def delete_question(question_id):
 
     return response
 
-
-'''
-@TODO:
-Create an endpoint to POST a new question,
-which will require the question and answer text,
-category, and difficulty score.
-
-TEST: When you submit a question on the "Add" tab,
-the form will clear and the question will appear at the end of the last
-page of the questions list in the "List" tab.
-'''
 
 '''
 @TODO:
