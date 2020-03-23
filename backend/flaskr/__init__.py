@@ -51,11 +51,23 @@ def after_request(response):
     return response
 
 
-'''
-@TODO:
-Create an endpoint to handle GET requests
-for all available categories.
-'''
+@app.route('/categories')
+def get_categories():
+    """Route handler for endpoint showing all categories
+
+    Returns:
+        response: A json object representing all categories
+    """
+
+    categories = Category.query.order_by(Category.id).all()
+    categories = {category.id: category.name for category in categories}
+
+    response = jsonify({
+        'success': True,
+        'categories': categories,
+    })
+
+    return response
 
 
 @app.route('/questions')
