@@ -110,6 +110,15 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Bad Request')
 
+    def test_questions_delete_method_not_allowed_fail(self):
+        """Test that delete method is not allowed at /questions endpoint"""
+
+        response = self.client().delete('/questions')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
     def test_delete_question_success(self):
         """Test successful deletion of question"""
 
@@ -129,6 +138,24 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Unprocessable Entity')
+
+    def test_question_get_method_not_allowed_fail(self):
+        """Test that get method is not allowed at /questions/id endpoint"""
+
+        response = self.client().get('/questions/1')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_question_post_method_not_allowed_fail(self):
+        """Test that post method is not allowed at /questions/id endpoint"""
+
+        response = self.client().post('/questions/1')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
 
 class CategoryTestCase(unittest.TestCase):
@@ -160,6 +187,24 @@ class CategoryTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), True)
         self.assertTrue(response.json.get('categories'))
 
+    def test_categories_post_not_allowed_fail(self):
+        """Test that post method is not allowed at /categories endpoint"""
+
+        response = self.client().post('/categories')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_categories_delete_not_allowed_fail(self):
+        """Test that delete method is not allowed at /categories endpoint"""
+
+        response = self.client().delete('/categories')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
     def test_get_category_questions_success(self):
         """Test successful retrieval of questions from a category"""
 
@@ -186,6 +231,24 @@ class CategoryTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Not Found')
+
+    def test_category_questions_post_not_allowed_fail(self):
+        """Test that post method isn't allowed at /categories/id/questions"""
+
+        response = self.client().post('/categories/1/questions')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_category_questions_delete_not_allowed_fail(self):
+        """Test that delete method isn't allowed at /categories/id/questions"""
+
+        response = self.client().delete('/categories/1/questions')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
 
 class QuizTestCase(unittest.TestCase):
@@ -266,6 +329,24 @@ class QuizTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Bad Request')
+
+    def test_quizzes_get_not_allowed_fail(self):
+        """Test that get method is not allowed at /quizzes endpoint"""
+
+        response = self.client().get('/quizzes')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_quizzes_delete_not_allowed_fail(self):
+        """Test that delete method is not allowed at /quizzes endpoint"""
+
+        response = self.client().delete('/quizzes')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
 
 if __name__ == "__main__":
