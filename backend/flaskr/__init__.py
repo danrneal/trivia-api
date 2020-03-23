@@ -1,3 +1,16 @@
+"""A flask-based trivia API
+
+Users can add questions to the trivia database, view questions in the database,
+and play a triva game using those questions
+
+    Usage: flask run
+
+Attributes:
+    QUESTIONS_PER_PAGE: An int that is a global constant representing how many
+        questions to show on a page
+    app: A flask Flack object creating the flask app
+"""
+
 import os
 import random
 from flask import Flask, request, abort, jsonify
