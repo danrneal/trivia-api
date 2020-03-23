@@ -227,33 +227,105 @@ def create_quiz():
             specified parameters
     """
 
-    quiz_category_id = request.json.get('quiz_category_id')
-    previous_question_ids = request.json.get('previous_question_ids')
+    try:
 
-    questions = Question.query.filter(~Question.id.in_(previous_question_ids))
+        quiz_category_id = request.json.get('quiz_category_id')
+        previous_question_ids = request.json.get('previous_question_ids')
 
-    if quiz_category_id != 0:
-        questions = questions.filter(
-            Question.category_id == quiz_category_id
+        questions = Question.query.filter(
+            ~Question.id.in_(previous_question_ids)
         )
 
-    questions = questions.all()
+        if quiz_category_id != 0:
+            questions = questions.filter(
+                Question.category_id == quiz_category_id
+            )
 
-    if questions:
-        question = random.choice(questions).format()
-    else:
-        question = None
+        questions = questions.all()
 
-    response = jsonify({
-        'success': True,
-        'question': question,
-    })
+        if questions:
+            question = random.choice(questions).format()
+        else:
+            question = None
+
+        response = jsonify({
+            'success': True,
+            'question': question,
+        })
+
+    except AttributeError:
+        abort(400)
 
     return response
 
 
-'''
-@TODO:
-Create error handlers for all expected errors
-including 404 and 422.
-'''
+@app.errorhandler(400)
+def bad_request(error):  # pylint: disable=unused-argument
+    """Error handler for 400 bad request
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 400,
+        'message': 'Bad Request',
+    })
+    return response, 400
+
+
+@app.errorhandler(404)
+def not_found(error):  # pylint: disable=unused-argument
+    """Error handler for 404 not found
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 404,
+        'message': 'Not Found',
+    })
+    return response, 404
+
+
+@app.errorhandler(422)
+def unprocessable_entity(error):  # pylint: disable=unused-argument
+    """Error handler for 422 unprocessable entity
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 422,
+        'message': 'Unprocessable Entity',
+    })
+    return response, 422
+
+
+@app.errorhandler(500)
+def internal_server_error(error):  # pylint: disable=unused-argument
+    """Error handler for 500 internal server error
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 500,
+        'message': 'Internal Server Error',
+    })
+    return response, 500
