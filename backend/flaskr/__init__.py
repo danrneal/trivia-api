@@ -87,7 +87,7 @@ def get_questions():
         abort(404)
 
     categories = Category.query.order_by(Category.id).all()
-    categories = [category.format() for category in categories]
+    categories = {category.id: category.name for category in categories}
 
     response = jsonify({
         'success': True,
