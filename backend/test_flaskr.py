@@ -6,7 +6,7 @@ Classes:
 
 import unittest
 from flaskr import app, QUESTIONS_PER_PAGE
-from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Question
+from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Question, Category
 
 
 class QuestionTestCase(unittest.TestCase):
@@ -255,14 +255,31 @@ class CategoryTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), True)
         self.assertTrue(response.json.get('categories'))
 
-    def test_categories_post_not_allowed_fail(self):
-        """Test that post method is not allowed at /categories endpoint"""
+    def test_create_category_success(self):
+        """Test successful creation of category"""
+
+        new_category = {
+            'name': 'test'
+        }
+
+        response = self.client().post('/categories', json=new_category)
+
+        created_category_id = response.json.get('created_category_id')
+        category = Category.query.get(created_category_id)
+        new_category['id'] = created_category_id
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertEqual(category.format(), new_category)
+
+    def test_create_category_no_info_fail(self):
+        """Test failed category creation when info is missing"""
 
         response = self.client().post('/categories')
 
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json.get('success'), False)
-        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+        self.assertEqual(response.json.get('message'), 'Bad Request')
 
     def test_categories_patch_not_allowed_fail(self):
         """Test that patch method is not allowed at /categories endpoint"""
