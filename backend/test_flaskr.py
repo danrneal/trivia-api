@@ -262,7 +262,7 @@ class CategoryTestCase(unittest.TestCase):
             'name': 'test'
         }
 
-        response = self.client().post('/categories', json=new_category)
+        response = self.client().post('/categories', data=new_category)
 
         created_category_id = response.json.get('created_category_id')
         category = Category.query.get(created_category_id)
