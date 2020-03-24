@@ -17,7 +17,7 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from models import setup_db, Question, Category
+from models import setup_db, Question, Category, User
 
 QUESTIONS_PER_PAGE = 10
 
@@ -339,6 +339,31 @@ def create_quiz():
         response = jsonify({
             'success': True,
             'question': question,
+        })
+
+    except AttributeError:
+        abort(400)
+
+    return response
+
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    """Route handler for endpoint to create a user
+
+    Returns:
+        response: A json object containing the id of the user that was created
+    """
+
+    try:
+
+        user = User(username=request.json.get('username'))
+
+        user.insert()
+
+        response = jsonify({
+            'success': True,
+            'created_user_id': user.id,
         })
 
     except AttributeError:
