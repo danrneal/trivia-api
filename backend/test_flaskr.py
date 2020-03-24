@@ -483,6 +483,15 @@ class UserTestCase(unittest.TestCase):
     def tearDown(self):
         """Executed after each test"""
 
+    def test_get_users_success(self):
+        """Test successful retrieval of users"""
+
+        response = self.client().get('/users')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertTrue(response.json.get('users'))
+
     def test_create_user_success(self):
         """Test successful creation of a user"""
 
@@ -508,15 +517,6 @@ class UserTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Bad Request')
-
-    def test_users_get_not_allowed_fail(self):
-        """Test that get method is not allowed at /users endpoint"""
-
-        response = self.client().get('/users')
-
-        self.assertEqual(response.status_code, 405)
-        self.assertEqual(response.json.get('success'), False)
-        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
     def test_users_patch_not_allowed_fail(self):
         """Test that patch method is not allowed at /users endpoint"""
