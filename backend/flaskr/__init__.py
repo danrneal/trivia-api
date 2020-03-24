@@ -243,20 +243,16 @@ def create_category():
             created
     """
 
-    try:
+    name = request.form.get('name')
 
-        category = Category(
-            name=request.json.get('name')
-        )
-
+    if name is not None:
+        category = Category(name=name)
         category.insert()
-
         response = jsonify({
             'success': True,
             'created_category_id': category.id,
         })
-
-    except AttributeError:
+    else:
         abort(400)
 
     return response
