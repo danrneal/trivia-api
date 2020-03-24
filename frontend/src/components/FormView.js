@@ -13,8 +13,6 @@ class FormView extends Component {
       difficulty: 1,
       category_id: 1,
       categories: {},
-      name: "",
-      icon: null
     }
   }
 
@@ -65,9 +63,7 @@ class FormView extends Component {
 
   submitCategory = (event) => {
     event.preventDefault();
-    const data = new FormData();
-    data.append('icon', this.state.icon);
-    data.append('name', this.state.name);
+    const data = new FormData($('#add-category-form')[0]);
     $.ajax({
       url: '/categories',
       type: "POST",
@@ -144,11 +140,11 @@ class FormView extends Component {
         <form className="form-view" id="add-category-form" onSubmit={this.submitCategory}>
           <label>
             Name
-            <input type="text" name="name" onChange={this.handleChange} />
+            <input type="text" name="name" />
           </label>
           <label>
-            Icon
-            <input type="file" name="icon" onChange={this.handleChange} />
+            Icon (svg)
+            <input type="file" name="icon" accept="image/svg+xml" />
           </label>
           <input type="submit" className="button" value="Submit" />
         </form>

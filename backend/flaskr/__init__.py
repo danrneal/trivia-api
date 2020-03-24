@@ -16,6 +16,7 @@ import random
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
@@ -246,6 +247,18 @@ def create_category():
     name = request.form.get('name')
 
     if name is not None:
+
+        icon = request.files.get('icon')
+
+        if icon is not None:
+
+            if icon.content_type != 'image/svg+xml':
+                abort(400)
+
+            ext = os.path.splitext(icon.filename)[1]
+            filename = secure_filename(name.lower() + ext)
+            icon.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         category = Category(name=name)
         category.insert()
         response = jsonify({
