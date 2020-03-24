@@ -504,6 +504,7 @@ class UserTestCase(unittest.TestCase):
         created_user_id = response.json.get('created_user_id')
         user = User.query.get(created_user_id)
         new_user['id'] = created_user_id
+        new_user['score'] = 0
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json.get('success'), True)
@@ -531,6 +532,75 @@ class UserTestCase(unittest.TestCase):
         """Test that delete method is not allowed at /users endpoint"""
 
         response = self.client().delete('/users')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_patch_user_score_success(self):
+        """Test successful changing of a user's score"""
+
+        user_id = User.query.order_by(User.id.desc()).first().id
+        score = {
+            'score': 2,
+        }
+
+        response = self.client().patch(f'/users/{user_id}', json=score)
+
+        user = User.query.get(user_id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertEqual(response.json.get('updated_user_id'), user_id)
+        self.assertGreaterEqual(user.score, 2)
+
+    def test_patch_user_score_out_of_range_fail(self):
+        """Test failed user score change when user does not exist"""
+
+        user_id = User.query.order_by(User.id.desc()).first().id
+        score = {
+            'score': 2,
+        }
+
+        response = self.client().patch(f'/users/{user_id+1}', json=score)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Unprocessable Entity')
+
+    def test_patch_user_score_no_score_fail(self):
+        """Test failed user score change when no score is given"""
+
+        user_id = User.query.order_by(User.id.desc()).first().id
+
+        response = self.client().patch(f'/users/{user_id}')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Bad Request')
+
+    def test_user_get_method_not_allowed_fail(self):
+        """Test that get method is not allowed at /users/id endpoint"""
+
+        response = self.client().get('/users/1')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_user_post_method_not_allowed_fail(self):
+        """Test that post method is not allowed at /users/id endpoint"""
+
+        response = self.client().post('/users/1')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_user_delete_method_not_allowed_fail(self):
+        """Test that delete method is not allowed at /users/id endpoint"""
+
+        response = self.client().delete('/users/1')
 
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json.get('success'), False)
