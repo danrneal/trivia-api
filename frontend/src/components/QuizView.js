@@ -23,7 +23,7 @@ class QuizView extends Component {
   componentDidMount() {
     $.ajax({
       url: `/categories`,
-      type: "GET",
+      type: 'GET',
       success: (result) => {
         this.setState({ categories: result.categories })
         return;
@@ -49,7 +49,7 @@ class QuizView extends Component {
 
     $.ajax({
       url: '/quizzes',
-      type: "POST",
+      type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -130,7 +130,7 @@ class QuizView extends Component {
   }
 
   evaluateAnswer = () => {
-    const formatGuess = this.state.guess.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase()
+    const formatGuess = this.state.guess.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase()
     const answerArray = this.state.currentQuestion.answer.toLowerCase().split(' ');
     return answerArray.includes(formatGuess)
   }
@@ -140,7 +140,7 @@ class QuizView extends Component {
     return (
       <div className="quiz-play-holder">
         <div className="quiz-question">{this.state.currentQuestion.question}</div>
-        <div className={`${evaluate ? 'correct' : 'wrong'}`}>{evaluate ? "You were correct!" : "You were incorrect"}</div>
+        <div className={`${evaluate ? 'correct' : 'wrong'}`}>{evaluate ? 'You were correct!' : 'You were incorrect'}</div>
         <div className="quiz-answer">{this.state.currentQuestion.answer}</div>
         <div className="next-question button" onClick={this.getNextQuestion}> Next Question </div>
       </div>

@@ -91,7 +91,7 @@ class QuestionTestCase(unittest.TestCase):
 
         new_question = {
             'question': "What's the answer to life the universe & everything?",
-            'answer': "42",
+            'answer': '42',
             'category_id': 1,
             'rating': 3,
             'difficulty': 5,
@@ -461,5 +461,5 @@ class QuizTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

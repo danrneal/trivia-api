@@ -36,7 +36,7 @@ class Question extends Component {
           {this.state.visibleAnswer ? 'Hide' : 'Show'} Answer
           </div>
         <div className="answer-holder">
-          <span style={{ "visibility": this.state.visibleAnswer ? 'visible' : 'hidden' }}>Answer: {answer}</span>
+          <span style={{ 'visibility': this.state.visibleAnswer ? 'visible' : 'hidden' }}>Answer: {answer}</span>
         </div>
       </div>
     );

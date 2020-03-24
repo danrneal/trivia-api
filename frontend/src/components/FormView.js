@@ -7,8 +7,8 @@ class FormView extends Component {
   constructor(props) {
     super();
     this.state = {
-      question: "",
-      answer: "",
+      question: '',
+      answer: '',
       rating: 1,
       difficulty: 1,
       category_id: 1,
@@ -19,7 +19,7 @@ class FormView extends Component {
   componentDidMount() {
     $.ajax({
       url: `/categories`,
-      type: "GET",
+      type: 'GET',
       success: (result) => {
         this.setState({ categories: result.categories })
         return;
@@ -36,7 +36,7 @@ class FormView extends Component {
     event.preventDefault();
     $.ajax({
       url: '/questions',
-      type: "POST",
+      type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -51,7 +51,7 @@ class FormView extends Component {
       },
       crossDomain: true,
       success: (result) => {
-        document.getElementById("add-question-form").reset();
+        document.getElementById('add-question-form').reset();
         return;
       },
       error: (error) => {
@@ -66,7 +66,7 @@ class FormView extends Component {
     const data = new FormData($('#add-category-form')[0]);
     $.ajax({
       url: '/categories',
-      type: "POST",
+      type: 'POST',
       dataType: 'json',
       contentType: false,
       data: data,
@@ -76,7 +76,7 @@ class FormView extends Component {
       },
       crossDomain: true,
       success: (result) => {
-        document.getElementById("add-category-form").reset();
+        document.getElementById('add-category-form').reset();
         return;
       },
       error: (error) => {

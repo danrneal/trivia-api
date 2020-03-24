@@ -20,7 +20,7 @@ from flask_sqlalchemy import SQLAlchemy
 DB_DIALECT = 'postgresql'
 DB_HOST = 'localhost'
 DB_PORT = 5432
-DB_NAME = "trivia"
+DB_NAME = 'trivia'
 
 DB_PATH = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
@@ -28,14 +28,14 @@ db = SQLAlchemy()
 
 
 def setup_db(app, database_path=DB_PATH):
-    '''Binds a flask application and a SQLAlchemy service
+    """Binds a flask application and a SQLAlchemy service
 
     Args:
         app: A flask app
         database_path: A str representing the location of the db
-    '''
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    """
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_path
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = '../frontend/public'
     db.app = app
     db.init_app(app)
@@ -43,7 +43,7 @@ def setup_db(app, database_path=DB_PATH):
 
 
 class Question(db.Model):
-    '''A model representing a trivia question
+    """A model representing a trivia question
 
     Attributes:
         id: An int that serves as the unique identifier for a question
@@ -52,7 +52,7 @@ class Question(db.Model):
         category_id: The id of the category that the question belongs to
         difficulty: An int representing the difficulty of the question
         rating: An int representing the rating of the question
-    '''
+    """
 
     __tablename__ = 'questions'
 
@@ -102,12 +102,12 @@ class Question(db.Model):
 
 
 class Category(db.Model):
-    '''A model representing a category of trivia questions
+    """A model representing a category of trivia questions
 
     Attributes:
         id: An int that serves as the unique identifier for a category
         name: A str representing the name of the category
-    '''
+    """
 
     __tablename__ = 'categories'
 
