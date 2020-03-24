@@ -98,8 +98,13 @@ class QuestionTestCase(unittest.TestCase):
 
         response = self.client().post('/questions', json=new_question)
 
+        created_question_id = response.json.get('created_question_id')
+        question = Question.query.get(created_question_id)
+        new_question['id'] = created_question_id
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json.get('success'), True)
+        self.assertEqual(question.format(), new_question)
 
     def test_create_question_no_info_fail(self):
         """Test failed question creation when info is missing"""
@@ -123,16 +128,21 @@ class QuestionTestCase(unittest.TestCase):
         """Test successful deletion of question"""
 
         question_id = Question.query.order_by(Question.id.desc()).first().id
+
         response = self.client().delete(f'/questions/{question_id}')
+
+        question = Question.query.get(question_id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json.get('success'), True)
         self.assertEqual(response.json.get('deleted_question_id'), question_id)
+        self.assertIsNone(question)
 
     def test_delete_question_out_of_range_fail(self):
         """Test failed questions deletion when question does not exist"""
 
         question_id = Question.query.order_by(Question.id.desc()).first().id
+
         response = self.client().delete(f'/questions/{question_id+1}')
 
         self.assertEqual(response.status_code, 422)
