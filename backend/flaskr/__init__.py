@@ -58,7 +58,7 @@ def after_request(response):
         'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
     )
     response.headers.add(
-        'Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS'
+        'Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS'
     )
 
     return response
@@ -135,6 +135,7 @@ def create_question():
                 answer=request.json.get('answer'),
                 category_id=request.json.get('category_id'),
                 difficulty=request.json.get('difficulty'),
+                rating=request.json.get('rating'),
             )
 
             question.insert()
@@ -146,6 +147,43 @@ def create_question():
 
     except AttributeError:
         abort(400)
+
+    return response
+
+
+@app.route('/questions/<int:question_id>', methods=['PATCH'])
+def patch_question_rating(question_id):
+    """Route handler for endpoint updating the rating of a single question
+
+    Args:
+        question_id: An int representing the identifier for the question to
+            update the rating of
+
+    Returns:
+        response: A json object stating if the request was successful
+    """
+
+    question = Question.query.get(question_id)
+
+    if question is None:
+        abort(422)
+
+    try:
+
+        rating = request.json.get('rating')
+
+        if rating:
+            question.rating = int(rating)
+
+        question.update()
+
+    except AttributeError:
+        abort(400)
+
+    response = jsonify({
+        'success': True,
+        'updated_question_id': question_id,
+    })
 
     return response
 
