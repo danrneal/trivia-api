@@ -13,6 +13,7 @@ class FormView extends Component {
       difficulty: 1,
       category_id: 1,
       categories: {},
+      username: ''
     }
   }
 
@@ -86,6 +87,31 @@ class FormView extends Component {
     })
   }
 
+  submitUser = (event) => {
+    event.preventDefault();
+    $.ajax({
+      url: '/users',
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        username: this.state.username
+      }),
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true,
+      success: (result) => {
+        document.getElementById('add-user-form').reset();
+        return;
+      },
+      error: (error) => {
+        alert('Unable to add user. Please try your request again')
+        return;
+      }
+    })
+  }
+
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
@@ -145,6 +171,15 @@ class FormView extends Component {
           <label>
             Icon (svg)
             <input type="file" name="icon" accept="image/svg+xml" />
+          </label>
+          <input type="submit" className="button" value="Submit" />
+        </form>
+        <hr></hr>
+        <h2>Add a New Trivia User</h2>
+        <form className="form-view" id="add-user-form" onSubmit={this.submitUser}>
+          <label>
+            Username
+            <input type="text" name="username" onChange={this.handleChange} />
           </label>
           <input type="submit" className="button" value="Submit" />
         </form>
