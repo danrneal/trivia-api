@@ -116,6 +116,24 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Bad Request')
 
+    def test_questions_patch_not_allowed_fail(self):
+        """Test that patch method is not allowed at /questions endpoint"""
+
+        response = self.client().patch('/questions')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_questions_delete_method_not_allowed_fail(self):
+        """Test that delete method is not allowed at /questions endpoint"""
+
+        response = self.client().delete('/questions')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
     def test_patch_question_rating_success(self):
         """Test successful changing of a question rating"""
 
@@ -163,15 +181,6 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Bad Request')
-
-    def test_questions_delete_method_not_allowed_fail(self):
-        """Test that delete method is not allowed at /questions endpoint"""
-
-        response = self.client().delete('/questions')
-
-        self.assertEqual(response.status_code, 405)
-        self.assertEqual(response.json.get('success'), False)
-        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
     def test_delete_question_success(self):
         """Test successful deletion of question"""
@@ -255,6 +264,15 @@ class CategoryTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('success'), False)
         self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
+    def test_categories_patch_not_allowed_fail(self):
+        """Test that patch method is not allowed at /categories endpoint"""
+
+        response = self.client().patch('/categories')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
     def test_categories_delete_not_allowed_fail(self):
         """Test that delete method is not allowed at /categories endpoint"""
 
@@ -295,6 +313,15 @@ class CategoryTestCase(unittest.TestCase):
         """Test that post method isn't allowed at /categories/id/questions"""
 
         response = self.client().post('/categories/1/questions')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_category_questions_patch_not_allowed_fail(self):
+        """Test that patch method isn't allowed at /categories/id/questions"""
+
+        response = self.client().patch('/categories/1/questions')
 
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json.get('success'), False)
@@ -393,6 +420,15 @@ class QuizTestCase(unittest.TestCase):
         """Test that get method is not allowed at /quizzes endpoint"""
 
         response = self.client().get('/quizzes')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_quizzes_patch_not_allowed_fail(self):
+        """Test that patch method is not allowed at /quizzes endpoint"""
+
+        response = self.client().patch('/quizzes')
 
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json.get('success'), False)
