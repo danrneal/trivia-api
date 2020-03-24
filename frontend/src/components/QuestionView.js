@@ -101,9 +101,9 @@ class QuestionView extends Component {
     })
   }
 
-  questionAction = (id) => (action) => {
-    if(action === 'DELETE') {
-      if(window.confirm('are you sure you want to delete the question?')) {
+  questionAction = (id) => (action, rating = 0) => {
+    if (action === 'DELETE') {
+      if (window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
           url: `/questions/${id}`,
           type: "DELETE",
@@ -116,6 +116,30 @@ class QuestionView extends Component {
           }
         })
       }
+    } else if (action === 'PATCH') {
+      let questions = [...this.state.questions];
+      let targetQuestion = questions.find((question) => question.id === id);
+
+      $.ajax({
+        url: `/questions/${id}`,
+        type: "PATCH",
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({ rating: rating }),
+        xhrFields: {
+          withCredentials: true
+        },
+        crossDomain: true,
+        success: (result) => {
+          targetQuestion.rating = rating;
+          this.setState({ questions: questions });
+          return;
+        },
+        error: (error) => {
+          alert('Unable to load questions. Please try your request again')
+          return;
+        }
+      })
     }
   }
 
@@ -142,6 +166,7 @@ class QuestionView extends Component {
               question={q.question}
               answer={q.answer}
               category={this.state.categories[q.category_id]}
+              rating={q.rating}
               difficulty={q.difficulty}
               questionAction={this.questionAction(q.id)}
             />

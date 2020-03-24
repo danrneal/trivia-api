@@ -28,7 +28,7 @@
   display: flex;
   flex-direction: row;
   height: 30px;
-  width: 200px;
+  width: 300px;
   align-items: center;
   justify-content: space-between;
 }
@@ -68,6 +68,10 @@ span.page-num.active {
 
 img.category {
   width: 30px;
+}
+
+img.star {
+  width: 20px;
 }
 
 img.delete {

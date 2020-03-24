@@ -9,6 +9,7 @@ class FormView extends Component {
     this.state = {
       question: "",
       answer: "",
+      rating: 1,
       difficulty: 1,
       category_id: 1,
       categories: {}
@@ -41,6 +42,7 @@ class FormView extends Component {
       data: JSON.stringify({
         question: this.state.question,
         answer: this.state.answer,
+        rating: this.state.rating,
         difficulty: this.state.difficulty,
         category_id: this.state.category_id
       }),
@@ -74,7 +76,17 @@ class FormView extends Component {
           </label>
           <label>
             Answer
-            <input type="text" name="answer" onChange={this.handleChange}/>
+            <input type="text" name="answer" onChange={this.handleChange} />
+          </label>
+          <label>
+            Rating
+            <select name="rating" onChange={this.handleChange}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
           </label>
           <label>
             Difficulty
