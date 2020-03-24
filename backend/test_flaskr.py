@@ -6,7 +6,9 @@ Classes:
 
 import unittest
 from flaskr import app, QUESTIONS_PER_PAGE
-from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Question, Category
+from models import (
+    DB_DIALECT, DB_HOST, DB_PORT, setup_db, Question, Category, User
+)
 
 
 class QuestionTestCase(unittest.TestCase):
@@ -455,6 +457,80 @@ class QuizTestCase(unittest.TestCase):
         """Test that delete method is not allowed at /quizzes endpoint"""
 
         response = self.client().delete('/quizzes')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+
+class UserTestCase(unittest.TestCase):
+    """This class represents the test cases for the user endpoints
+
+    Attributes:
+        app: A flask app from the flaskr app
+        client: A test client for the flask app to while testing
+        db_name: A str representing the name of the test database
+        db_path: A str representing the location of the test database
+    """
+
+    def setUp(self):
+        self.app = app
+        self.client = self.app.test_client
+        self.db_name = 'trivia_test'
+        self.db_path = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{self.db_name}'
+        setup_db(self.app, self.db_path)
+
+    def tearDown(self):
+        """Executed after each test"""
+
+    def test_create_user_success(self):
+        """Test successful creation of a user"""
+
+        new_user = {
+            'username': 'user'
+        }
+
+        response = self.client().post('/users', json=new_user)
+
+        created_user_id = response.json.get('created_user_id')
+        user = User.query.get(created_user_id)
+        new_user['id'] = created_user_id
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertEqual(user.format(), new_user)
+
+    def test_create_user_no_info_fail(self):
+        """Test failed user creation when info is missing"""
+
+        response = self.client().post('/users')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Bad Request')
+
+    def test_users_get_not_allowed_fail(self):
+        """Test that get method is not allowed at /users endpoint"""
+
+        response = self.client().get('/users')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_users_patch_not_allowed_fail(self):
+        """Test that patch method is not allowed at /users endpoint"""
+
+        response = self.client().patch('/users')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_users_delete_not_allowed_fail(self):
+        """Test that delete method is not allowed at /users endpoint"""
+
+        response = self.client().delete('/users')
 
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json.get('success'), False)
