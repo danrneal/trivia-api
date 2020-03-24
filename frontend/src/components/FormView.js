@@ -32,7 +32,6 @@ class FormView extends Component {
     })
   }
 
-
   submitQuestion = (event) => {
     event.preventDefault();
     $.ajax({
