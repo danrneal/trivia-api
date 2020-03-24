@@ -94,6 +94,7 @@ class QuestionTestCase(unittest.TestCase):
             'answer': "42",
             'category_id': 1,
             'difficulty': 5,
+            'rating': 3,
         }
 
         response = self.client().post('/questions', json=new_question)
@@ -110,6 +111,54 @@ class QuestionTestCase(unittest.TestCase):
         """Test failed question creation when info is missing"""
 
         response = self.client().post('/questions')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Bad Request')
+
+    def test_patch_question_rating_success(self):
+        """Test successful changing of a question rating"""
+
+        question_id = Question.query.order_by(Question.id.desc()).first().id
+        rating = {
+            'rating': 1,
+        }
+
+        response = self.client().patch(
+            f'/questions/{question_id}',
+            json=rating
+        )
+
+        question = Question.query.get(question_id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json.get('success'), True)
+        self.assertEqual(response.json.get('updated_question_id'), question_id)
+        self.assertEqual(question.rating, 1)
+
+    def test_patch_question_rating_out_of_range_fail(self):
+        """Test failed question rating change when question does not exist"""
+
+        question_id = Question.query.order_by(Question.id.desc()).first().id
+        rating = {
+            'rating': 1,
+        }
+
+        response = self.client().patch(
+            f'/questions/{question_id+1}',
+            json=rating
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json.get('success'), False)
+        self.assertEqual(response.json.get('message'), 'Unprocessable Entity')
+
+    def test_patch_question_rating_no_rating_fail(self):
+        """Test failed question rating change when no rating is given"""
+
+        question_id = Question.query.order_by(Question.id.desc()).first().id
+
+        response = self.client().patch(f'/questions/{question_id}')
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json.get('success'), False)
