@@ -13,6 +13,7 @@ class QuizView extends Component {
       previousQuestionIds: [],
       showAnswer: false,
       categories: {},
+      users: {},
       numCorrect: 0,
       currentQuestion: {},
       guess: '',
@@ -30,6 +31,18 @@ class QuizView extends Component {
       },
       error: (error) => {
         alert('Unable to load categories. Please try your request again')
+        return;
+      }
+    })
+    $.ajax({
+      url: '/users',
+      type: 'GET',
+      success: (result) => {
+        this.setState({ users: result.users })
+        return;
+      },
+      error: (error) => {
+        alert('Unable to load users. Please try your request again')
         return;
       }
     })
@@ -101,6 +114,18 @@ class QuizView extends Component {
   renderPrePlay() {
     return (
       <div className="quiz-play-holder">
+        <form className="form-view" id="choose_user-form">
+          <label>
+            User
+            <select name="user" onChange={this.handleChange}>
+              {Object.keys(this.state.users).map(id => {
+                return (
+                  <option key={id} value={id}>{id} - {this.state.users[id]}</option>
+                )
+              })}
+            </select>
+          </label>
+        </form>
         <div className="choose-header">Choose Category</div>
         <div className="category-holder">
           <div className="play-category" onClick={this.selectCategory}>ALL</div>

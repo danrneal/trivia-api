@@ -20,6 +20,7 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: caryn
 --
@@ -141,6 +142,17 @@ ALTER TABLE ONLY public.questions ALTER COLUMN id SET DEFAULT nextval('public.qu
 
 
 --
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: caryn
+--
+
+COPY public.users (id, username) FROM stdin;
+1	Alice
+2	Bob
+3	Charlie
+\.
+
+
+--
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: caryn
 --
 
@@ -182,6 +194,13 @@ COPY public.questions (id, question, answer, difficulty, rating, category_id) FR
 
 
 --
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: caryn
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+
+
+--
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: caryn
 --
 
@@ -193,6 +212,14 @@ SELECT pg_catalog.setval('public.categories_id_seq', 6, true);
 --
 
 SELECT pg_catalog.setval('public.questions_id_seq', 23, true);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: caryn
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
