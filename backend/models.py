@@ -50,6 +50,7 @@ class Question(db.Model):
         answer: A str representing the answer to the question
         category_id: The id of the category that the question belongs to
         difficulty: An int representing the difficulty of the question
+        rating: An int representing the rating of the question
     '''
 
     __tablename__ = 'questions'
@@ -59,12 +60,14 @@ class Question(db.Model):
     answer = Column(String)
     category_id = Column(Integer, ForeignKey('categories.id'))
     difficulty = Column(Integer)
+    rating = Column(Integer)
 
-    def __init__(self, question, answer, category_id, difficulty):
+    def __init__(self, question, answer, category_id, difficulty, rating):
         self.question = question
         self.answer = answer
         self.category_id = category_id
         self.difficulty = difficulty
+        self.rating = rating
 
     def insert(self):
         """Inserts a new question object into the db"""
@@ -92,6 +95,7 @@ class Question(db.Model):
             'answer': self.answer,
             'category_id': self.category_id,
             'difficulty': self.difficulty,
+            'rating': self.rating,
         }
         return question
 
