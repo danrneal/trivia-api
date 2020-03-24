@@ -59,15 +59,15 @@ class Question(db.Model):
     question = Column(String)
     answer = Column(String)
     category_id = Column(Integer, ForeignKey('categories.id'))
-    difficulty = Column(Integer)
     rating = Column(Integer)
+    difficulty = Column(Integer)
 
-    def __init__(self, question, answer, category_id, difficulty, rating):
+    def __init__(self, question, answer, category_id, rating, difficulty):
         self.question = question
         self.answer = answer
         self.category_id = category_id
-        self.difficulty = difficulty
         self.rating = rating
+        self.difficulty = difficulty
 
     def insert(self):
         """Inserts a new question object into the db"""
@@ -94,8 +94,8 @@ class Question(db.Model):
             'question': self.question,
             'answer': self.answer,
             'category_id': self.category_id,
-            'difficulty': self.difficulty,
             'rating': self.rating,
+            'difficulty': self.difficulty,
         }
         return question
 

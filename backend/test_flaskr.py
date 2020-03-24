@@ -93,8 +93,8 @@ class QuestionTestCase(unittest.TestCase):
             'question': "What's the answer to life the universe & everything?",
             'answer': "42",
             'category_id': 1,
-            'difficulty': 5,
             'rating': 3,
+            'difficulty': 5,
         }
 
         response = self.client().post('/questions', json=new_question)

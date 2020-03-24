@@ -134,8 +134,8 @@ def create_question():
                 question=request.json.get('question'),
                 answer=request.json.get('answer'),
                 category_id=request.json.get('category_id'),
-                difficulty=request.json.get('difficulty'),
                 rating=request.json.get('rating'),
+                difficulty=request.json.get('difficulty'),
             )
 
             question.insert()
