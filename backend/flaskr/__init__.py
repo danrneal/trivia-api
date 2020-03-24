@@ -376,7 +376,10 @@ def create_user():
 
     try:
 
-        user = User(username=request.json.get('username'))
+        user = User(
+            username=request.json.get('username'),
+            score=0,
+        )
 
         user.insert()
 
@@ -387,6 +390,43 @@ def create_user():
 
     except AttributeError:
         abort(400)
+
+    return response
+
+
+@app.route('/users/<int:user_id>', methods=['PATCH'])
+def patch_user_score(user_id):
+    """Route handler for endpoint updating the score of a single user
+
+    Args:
+        user_id: An int representing the identifier for the user to
+            update the score of
+
+    Returns:
+        response: A json object stating if the request was successful
+    """
+
+    user = User.query.get(user_id)
+
+    if user is None:
+        abort(422)
+
+    try:
+
+        score = request.json.get('score')
+
+        if score:
+            user.score += int(score)
+
+        user.update()
+
+    except AttributeError:
+        abort(400)
+
+    response = jsonify({
+        'success': True,
+        'updated_user_id': user_id,
+    })
 
     return response
 
