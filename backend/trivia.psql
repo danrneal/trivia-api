@@ -21,6 +21,40 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: caryn
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username text
+);
+
+
+ALTER TABLE public.users OWNER TO caryn;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: caryn
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO caryn;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: caryn
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
 -- Name: categories; Type: TABLE; Schema: public; Owner: caryn
 --
 

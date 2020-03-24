@@ -134,3 +134,37 @@ class Category(db.Model):
             'name': self.name,
         }
         return category
+
+
+class User(db.Model):
+    """A model representing a user
+
+    Attributes:
+        id: An int that serves as the unique identifier for a user
+        username: A str representing the name of the user
+    """
+
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+
+    def __init__(self, username):
+        self.username = username
+
+    def insert(self):
+        """Inserts a new user object into the db"""
+        db.session.add(self)
+        db.session.commit()
+
+    def format(self):
+        """Formats the user object as a dict
+
+        Returns:
+            user: A dict representing the user object
+        """
+        user = {
+            'id': self.id,
+            'username': self.username,
+        }
+        return user
