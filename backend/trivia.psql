@@ -27,7 +27,8 @@ SET default_with_oids = false;
 
 CREATE TABLE public.users (
     id integer NOT NULL,
-    username text
+    username text,
+    score integer
 );
 
 
@@ -128,6 +129,13 @@ ALTER SEQUENCE public.questions_id_seq OWNED BY public.questions.id;
 
 
 --
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: caryn
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
 -- Name: categories id; Type: DEFAULT; Schema: public; Owner: caryn
 --
 
@@ -145,10 +153,10 @@ ALTER TABLE ONLY public.questions ALTER COLUMN id SET DEFAULT nextval('public.qu
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: caryn
 --
 
-COPY public.users (id, username) FROM stdin;
-1	Alice
-2	Bob
-3	Charlie
+COPY public.users (id, username, score) FROM stdin;
+1	Alice	1
+2	Bob	4
+3	Charlie	8
 \.
 
 

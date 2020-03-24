@@ -148,13 +148,19 @@ class User(db.Model):
 
     id = Column(Integer, primary_key=True)
     username = Column(String)
+    score = Column(Integer, default=0)
 
-    def __init__(self, username):
+    def __init__(self, username, score):
         self.username = username
+        self.score = score
 
     def insert(self):
         """Inserts a new user object into the db"""
         db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        """Updates an existing user object in the db"""
         db.session.commit()
 
     def format(self):
@@ -166,5 +172,6 @@ class User(db.Model):
         user = {
             'id': self.id,
             'username': self.username,
+            'score': self.score,
         }
         return user
