@@ -347,6 +347,25 @@ def create_quiz():
     return response
 
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    """Route handler for endpoint showing all users
+
+    Returns:
+        response: A json object representing all users
+    """
+
+    users = User.query.order_by(User.id).all()
+    users = {user.id: user.username for user in users}
+
+    response = jsonify({
+        'success': True,
+        'users': users,
+    })
+
+    return response
+
+
 @app.route('/users', methods=['POST'])
 def create_user():
     """Route handler for endpoint to create a user
