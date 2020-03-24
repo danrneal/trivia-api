@@ -215,7 +215,7 @@ def delete_question(question_id):
     return response
 
 
-@app.route('/categories')
+@app.route('/categories', methods=['GET'])
 def get_categories():
     """Route handler for endpoint showing all categories
 
@@ -230,6 +230,34 @@ def get_categories():
         'success': True,
         'categories': categories,
     })
+
+    return response
+
+
+@app.route('/categories', methods=['POST'])
+def create_category():
+    """Route handler for endpoint to create a category
+
+    Returns:
+        response: A json object containing the id of the category that was
+            created
+    """
+
+    try:
+
+        category = Category(
+            name=request.json.get('name')
+        )
+
+        category.insert()
+
+        response = jsonify({
+            'success': True,
+            'created_category_id': category.id,
+        })
+
+    except AttributeError:
+        abort(400)
 
     return response
 

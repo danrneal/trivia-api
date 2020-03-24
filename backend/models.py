@@ -117,6 +117,11 @@ class Category(db.Model):
     def __init__(self, name):
         self.name = name
 
+    def insert(self):
+        """Inserts a new category object into the db"""
+        db.session.add(self)
+        db.session.commit()
+
     def format(self):
         """Formats the category object as a dict
 
