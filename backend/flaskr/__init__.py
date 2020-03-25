@@ -77,7 +77,7 @@ def get_questions():
     page = request.args.get('page', 1, type=int)
     current_questions = paginate_questions(questions, page)
 
-    if not current_questions:
+    if len(current_questions) == 0:
         abort(404)
 
     categories = Category.query.order_by(Category.id).all()
@@ -174,7 +174,7 @@ def patch_question_rating(question_id):
         old_rating = question.rating
         rating = request.json.get('rating')
 
-        if rating:
+        if rating is not None:
             question.rating = int(rating)
 
         question.update()
@@ -292,7 +292,7 @@ def get_category_questions(category_id):
     page = request.args.get('page', 1, type=int)
     current_questions = paginate_questions(questions, page)
 
-    if not current_questions:
+    if len(current_questions) == 0:
         abort(404)
 
     categories = Category.query.order_by(Category.id).all()
@@ -334,7 +334,7 @@ def create_quiz():
 
         questions = questions.all()
 
-        if questions:
+        if len(questions) > 0:
             question = random.choice(questions).format()
         else:
             question = None
@@ -419,7 +419,7 @@ def patch_user_score(user_id):
         old_score = user.score
         score = request.json.get('score')
 
-        if score:
+        if score is not None:
             user.score += int(score)
 
         user.update()
