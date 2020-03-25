@@ -139,6 +139,7 @@ class QuizView extends Component {
   renderPrePlay() {
     return (
       <div className="quiz-play-holder">
+        <div className="choose-header">Choose User</div>
         <form className="form-view" id="choose_user-form">
           <label>
             User
@@ -151,6 +152,7 @@ class QuizView extends Component {
             </select>
           </label>
         </form>
+        <hr></hr>
         <div className="choose-header">Choose Category</div>
         <div className="category-holder">
           <div className="play-category" onClick={this.selectCategory}>ALL</div>

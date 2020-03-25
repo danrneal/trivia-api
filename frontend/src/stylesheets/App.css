@@ -18,7 +18,10 @@
 }
 
 h2 {
+  padding-top: 5px;
   text-align: center;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 li {
