@@ -139,9 +139,13 @@ class QuestionTestCase(unittest.TestCase):
     def test_patch_question_rating_success(self):
         """Test successful changing of a question rating"""
 
-        question_id = Question.query.order_by(Question.id.desc()).first().id
+        question = Question.query.order_by(Question.id.desc()).first()
+        question_id = question.id
+        old_rating = question.rating
+        new_rating = (old_rating % 5) + 1
+
         rating = {
-            'rating': 1,
+            'rating': new_rating,
         }
 
         response = self.client().patch(
@@ -154,12 +158,15 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json.get('success'), True)
         self.assertEqual(response.json.get('updated_question_id'), question_id)
-        self.assertEqual(question.rating, 1)
+        self.assertEqual(response.json.get('old_rating'), old_rating)
+        self.assertEqual(response.json.get('new_rating'), new_rating)
+        self.assertEqual(question.rating, new_rating)
 
     def test_patch_question_rating_out_of_range_fail(self):
         """Test failed question rating change when question does not exist"""
 
         question_id = Question.query.order_by(Question.id.desc()).first().id
+
         rating = {
             'rating': 1,
         }
@@ -540,7 +547,10 @@ class UserTestCase(unittest.TestCase):
     def test_patch_user_score_success(self):
         """Test successful changing of a user's score"""
 
-        user_id = User.query.order_by(User.id.desc()).first().id
+        user = User.query.order_by(User.id.desc()).first()
+        user_id = user.id
+        old_score = user.score
+
         score = {
             'score': 2,
         }
@@ -552,12 +562,15 @@ class UserTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json.get('success'), True)
         self.assertEqual(response.json.get('updated_user_id'), user_id)
+        self.assertEqual(response.json.get('old_score'), old_score)
+        self.assertEqual(response.json.get('new_score'), old_score + 2)
         self.assertGreaterEqual(user.score, 2)
 
     def test_patch_user_score_out_of_range_fail(self):
         """Test failed user score change when user does not exist"""
 
         user_id = User.query.order_by(User.id.desc()).first().id
+
         score = {
             'score': 2,
         }
