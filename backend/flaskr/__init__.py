@@ -206,6 +206,7 @@ def delete_question(question_id):
     """
 
     question = Question.query.get(question_id)
+
     if question is None:
         abort(422)
 
@@ -264,10 +265,12 @@ def create_category():
 
         category = Category(name=name)
         category.insert()
+
         response = jsonify({
             'success': True,
             'created_category_id': category.id,
         })
+
     else:
         abort(400)
 
@@ -322,7 +325,6 @@ def create_quiz():
 
         quiz_category_id = request.json.get('quiz_category_id')
         previous_question_ids = request.json.get('previous_question_ids')
-
         questions = Question.query.filter(
             ~Question.id.in_(previous_question_ids)
         )
