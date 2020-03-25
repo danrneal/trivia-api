@@ -10,11 +10,13 @@ class QuizView extends Component {
     super();
     this.state = {
       quizCategoryId: null,
+      quizUserId: 1,
       previousQuestionIds: [],
       showAnswer: false,
       categories: {},
       users: {},
       numCorrect: 0,
+      score: null,
       currentQuestion: {},
       guess: '',
       forceEnd: false
@@ -99,12 +101,35 @@ class QuizView extends Component {
     })
   }
 
+  updateScore = () => {
+    $.ajax({
+      url: `/users/${this.state.quizUserId}`,
+      type: 'PATCH',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify({ score: this.state.numCorrect }),
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true,
+      success: (result) => {
+        this.setState({ score: result.new_score })
+        return;
+      },
+      error: (error) => {
+        alert('Unable to update score. Please try your request again')
+        return;
+      }
+    })
+  }
+
   restartGame = () => {
     this.setState({
       quizCategoryId: null,
       previousQuestionIds: [],
       showAnswer: false,
       numCorrect: 0,
+      score: null,
       currentQuestion: {},
       guess: '',
       forceEnd: false
@@ -117,7 +142,7 @@ class QuizView extends Component {
         <form className="form-view" id="choose_user-form">
           <label>
             User
-            <select name="user" onChange={this.handleChange}>
+            <select name="quizUserId" onChange={this.handleChange}>
               {Object.keys(this.state.users).map(id => {
                 return (
                   <option key={id} value={id}>{id} - {this.state.users[id]}</option>
@@ -146,12 +171,16 @@ class QuizView extends Component {
   }
 
   renderFinalScore() {
+    if (this.state.score === null) {
+      this.updateScore()
+    }
     return (
-      <div className="quiz-play-holder">
-        <div className="final-header"> Your Final Score is {this.state.numCorrect}</div>
-        <div className="play-again button" onClick={this.restartGame}> Play Again? </div>
-      </div>
-    )
+        <div className="quiz-play-holder">
+          <div className="final-header"> Your Final Score is {this.state.numCorrect}</div>
+          <div className="lifetime-header"> Your Lifetime Score is {this.state.score}</div>
+          <div className="play-again button" onClick={this.restartGame}> Play Again? </div>
+        </div>
+      )
   }
 
   evaluateAnswer = () => {
