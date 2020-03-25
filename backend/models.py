@@ -50,8 +50,8 @@ class Question(db.Model):
         question: A str representing the content of the question
         answer: A str representing the answer to the question
         category_id: The id of the category that the question belongs to
-        difficulty: An int representing the difficulty of the question
         rating: An int representing the rating of the question
+        difficulty: An int representing the difficulty of the question
     """
 
     __tablename__ = 'questions'
@@ -142,6 +142,7 @@ class User(db.Model):
     Attributes:
         id: An int that serves as the unique identifier for a user
         username: A str representing the name of the user
+        score: An int representing the lifetime score of a user
     """
 
     __tablename__ = 'users'
