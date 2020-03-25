@@ -171,6 +171,7 @@ def patch_question_rating(question_id):
 
     try:
 
+        old_rating = question.rating
         rating = request.json.get('rating')
 
         if rating:
@@ -184,6 +185,8 @@ def patch_question_rating(question_id):
     response = jsonify({
         'success': True,
         'updated_question_id': question_id,
+        'old_rating': old_rating,
+        'new_rating': question.rating,
     })
 
     return response
@@ -413,6 +416,7 @@ def patch_user_score(user_id):
 
     try:
 
+        old_score = user.score
         score = request.json.get('score')
 
         if score:
@@ -426,6 +430,8 @@ def patch_user_score(user_id):
     response = jsonify({
         'success': True,
         'updated_user_id': user_id,
+        'old_score': old_score,
+        'new_score': user.score,
     })
 
     return response
