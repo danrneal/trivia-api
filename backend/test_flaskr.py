@@ -2,6 +2,9 @@
 
 Classes:
     QuestionTestCase()
+    CategoryTestCase()
+    QuizTestCase()
+    UserTestCase()
 """
 
 import unittest
