@@ -1,14 +1,14 @@
-"""A flask-based trivia API
+"""A flask-based trivia API.
 
 Users can add questions to the trivia database, view questions in the database,
-and play a triva game using those questions
+and play a trivia game using those questions
 
-    Usage: flask run
+Usage: flask run
 
 Attributes:
     QUESTIONS_PER_PAGE: An int that is a global constant representing how many
         questions to show on a page
-    app: A flask Flack object creating the flask app
+    app: A flask Flask object creating the flask app
 """
 
 import os
@@ -28,11 +28,11 @@ CORS(app)
 
 
 def paginate_questions(questions, page):
-    """Retrieve questions for the current page only
+    """Retrieve questions for the current page only.
 
     Args:
         questions: A list of Question objects
-        page: An int representing the page number to retieive questions for
+        page: An int representing the page number to retrieve questions for
 
     Returns:
         A list of dicts representing questions for the given page
@@ -47,7 +47,7 @@ def paginate_questions(questions, page):
 
 @app.after_request
 def after_request(response):
-    """Adds response headers after request
+    """Adds response headers after request.
 
     Args:
         response: The response object to add headers to
@@ -55,7 +55,6 @@ def after_request(response):
     Returns:
         response: The response object that the headers were added to
     """
-
     response.headers.add(
         "Access-Control-Allow-Headers", "Content-Type, Authorization, true"
     )
@@ -68,12 +67,11 @@ def after_request(response):
 
 @app.route("/questions", methods=["GET"])
 def get_questions():
-    """Route handler for endpoint showing questions for a given page
+    """Route handler for endpoint showing questions for a given page.
 
     Returns:
         response: A json object representing questions for a given page
     """
-
     questions = Question.query.order_by(Question.id).all()
     page = request.args.get("page", 1, type=int)
     current_questions = paginate_questions(questions, page)
@@ -99,13 +97,12 @@ def get_questions():
 
 @app.route("/questions", methods=["POST"])
 def create_question():
-    """Route handler for endpoint to create a questoin
+    """Route handler for endpoint to create a question.
 
     Returns:
         response: A json object containing the id of the question that was
             created
     """
-
     try:
 
         search_term = request.json.get("search_term")
@@ -162,7 +159,7 @@ def create_question():
 
 @app.route("/questions/<int:question_id>", methods=["PATCH"])
 def patch_question_rating(question_id):
-    """Route handler for endpoint updating the rating of a single question
+    """Route handler for endpoint updating the rating of a single question.
 
     Args:
         question_id: An int representing the identifier for the question to
@@ -171,7 +168,6 @@ def patch_question_rating(question_id):
     Returns:
         response: A json object stating if the request was successful
     """
-
     question = Question.query.get(question_id)
 
     if question is None:
@@ -204,7 +200,7 @@ def patch_question_rating(question_id):
 
 @app.route("/questions/<int:question_id>", methods=["DELETE"])
 def delete_question(question_id):
-    """Route handler for endpoint to delete a single question
+    """Route handler for endpoint to delete a single question.
 
     Args:
         question_id: An int representing the identifier for a question to
@@ -214,7 +210,6 @@ def delete_question(question_id):
         response: A json object containing the id of the question that was
             deleted
     """
-
     question = Question.query.get(question_id)
 
     if question is None:
@@ -229,12 +224,11 @@ def delete_question(question_id):
 
 @app.route("/categories", methods=["GET"])
 def get_categories():
-    """Route handler for endpoint showing all categories
+    """Route handler for endpoint showing all categories.
 
     Returns:
         response: A json object representing all categories
     """
-
     categories = Category.query.order_by(Category.id).all()
     categories = {category.id: category.name for category in categories}
 
@@ -245,7 +239,7 @@ def get_categories():
 
 @app.route("/categories", methods=["POST"])
 def create_category():
-    """Route handler for endpoint to create a category
+    """Route handler for endpoint to create a category.
 
     Returns:
         response: A json object containing the id of the category that was
@@ -281,7 +275,7 @@ def create_category():
 
 @app.route("/categories/<int:category_id>/questions")
 def get_category_questions(category_id):
-    """Route handler for endpoint showing all questions for a specific category
+    """Route handler for endpoint showing all questions for a given category.
 
     Args:
         category_id: An int representing the identifier for a category to
@@ -319,13 +313,12 @@ def get_category_questions(category_id):
 
 @app.route("/quizzes", methods=["POST"])
 def create_quiz():
-    """Route handler for endpoint starting a new quiz
+    """Route handler for endpoint starting a new quiz.
 
     Returns:
         response: A json object representing a random question given the
             specified parameters
     """
-
     try:
 
         quiz_category_id = request.json.get("quiz_category_id")
@@ -356,12 +349,11 @@ def create_quiz():
 
 @app.route("/users", methods=["GET"])
 def get_users():
-    """Route handler for endpoint showing all users
+    """Route handler for endpoint showing all users.
 
     Returns:
         response: A json object representing all users
     """
-
     users = User.query.order_by(User.id).all()
     users = {user.id: user.username for user in users}
 
@@ -372,12 +364,11 @@ def get_users():
 
 @app.route("/users", methods=["POST"])
 def create_user():
-    """Route handler for endpoint to create a user
+    """Route handler for endpoint to create a user.
 
     Returns:
         response: A json object containing the id of the user that was created
     """
-
     try:
 
         user = User(username=request.json.get("username"), score=0,)
@@ -394,7 +385,7 @@ def create_user():
 
 @app.route("/users/<int:user_id>", methods=["PATCH"])
 def patch_user_score(user_id):
-    """Route handler for endpoint updating the score of a single user
+    """Route handler for endpoint updating the score of a single user.
 
     Args:
         user_id: An int representing the identifier for the user to
@@ -403,7 +394,6 @@ def patch_user_score(user_id):
     Returns:
         response: A json object stating if the request was successful
     """
-
     user = User.query.get(user_id)
 
     if user is None:
@@ -436,7 +426,7 @@ def patch_user_score(user_id):
 
 @app.errorhandler(400)
 def bad_request(error):  # pylint: disable=unused-argument
-    """Error handler for 400 bad request
+    """Error handler for 400 bad request.
 
     Args:
         error: unused
@@ -452,7 +442,7 @@ def bad_request(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(404)
 def not_found(error):  # pylint: disable=unused-argument
-    """Error handler for 404 not found
+    """Error handler for 404 not found.
 
     Args:
         error: unused
@@ -468,7 +458,7 @@ def not_found(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(405)
 def method_not_allowed(error):  # pylint: disable=unused-argument
-    """Error handler for 405 method not allowed
+    """Error handler for 405 method not allowed.
 
     Args:
         error: unused
@@ -484,7 +474,7 @@ def method_not_allowed(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(422)
 def unprocessable_entity(error):  # pylint: disable=unused-argument
-    """Error handler for 422 unprocessable entity
+    """Error handler for 422 unprocessable entity.
 
     Args:
         error: unused
@@ -504,7 +494,7 @@ def unprocessable_entity(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(500)
 def internal_server_error(error):  # pylint: disable=unused-argument
-    """Error handler for 500 internal server error
+    """Error handler for 500 internal server error.
 
     Args:
         error: unused

@@ -1,4 +1,4 @@
-"""Model objects used to model data for the db
+"""Model objects used to model data for the db.
 
 Attributes:
     DB_DIALECT: A str representing the dialect of the db
@@ -28,7 +28,7 @@ db = SQLAlchemy()
 
 
 def setup_db(app, database_path=DB_PATH):
-    """Binds a flask application and a SQLAlchemy service
+    """Binds a flask application and a SQLAlchemy service.
 
     Args:
         app: A flask app
@@ -43,7 +43,7 @@ def setup_db(app, database_path=DB_PATH):
 
 
 class Question(db.Model):
-    """A model representing a trivia question
+    """A model representing a trivia question.
 
     Attributes:
         id: An int that serves as the unique identifier for a question
@@ -64,6 +64,7 @@ class Question(db.Model):
     difficulty = Column(Integer)
 
     def __init__(self, question, answer, category_id, rating, difficulty):
+        """Set-up for Question object."""
         self.question = question
         self.answer = answer
         self.category_id = category_id
@@ -71,21 +72,22 @@ class Question(db.Model):
         self.difficulty = difficulty
 
     def insert(self):
-        """Inserts a new question object into the db"""
+        """Inserts a new question object into the db."""
         db.session.add(self)
         db.session.commit()
 
-    def update(self):
-        """Updates an existing question object in the db"""
+    @staticmethod
+    def update():
+        """Updates an existing question object in the db."""
         db.session.commit()
 
     def delete(self):
-        """Deletes an existing question object from the db"""
+        """Deletes an existing question object from the db."""
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
-        """Formats the question object as a dict
+        """Formats the question object as a dict.
 
         Returns:
             question: A dict representing the question object
@@ -102,7 +104,7 @@ class Question(db.Model):
 
 
 class Category(db.Model):
-    """A model representing a category of trivia questions
+    """A model representing a category of trivia questions.
 
     Attributes:
         id: An int that serves as the unique identifier for a category
@@ -116,15 +118,16 @@ class Category(db.Model):
     questions = relationship("Question", backref="category")
 
     def __init__(self, name):
+        """Set-up for Category object."""
         self.name = name
 
     def insert(self):
-        """Inserts a new category object into the db"""
+        """Inserts a new category object into the db."""
         db.session.add(self)
         db.session.commit()
 
     def format(self):
-        """Formats the category object as a dict
+        """Formats the category object as a dict.
 
         Returns:
             category: A dict representing the category object
@@ -137,7 +140,7 @@ class Category(db.Model):
 
 
 class User(db.Model):
-    """A model representing a user
+    """A model representing a user.
 
     Attributes:
         id: An int that serves as the unique identifier for a user
@@ -152,20 +155,22 @@ class User(db.Model):
     score = Column(Integer, default=0)
 
     def __init__(self, username, score):
+        """Set-up for User object."""
         self.username = username
         self.score = score
 
     def insert(self):
-        """Inserts a new user object into the db"""
+        """Inserts a new user object into the db."""
         db.session.add(self)
         db.session.commit()
 
-    def update(self):
-        """Updates an existing user object in the db"""
+    @staticmethod
+    def update():
+        """Updates an existing user object in the db."""
         db.session.commit()
 
     def format(self):
-        """Formats the user object as a dict
+        """Formats the user object as a dict.
 
         Returns:
             user: A dict representing the user object

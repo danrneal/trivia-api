@@ -1,4 +1,6 @@
-"""Test objects used to test the behavior of endpoints in the flaskr app
+"""Test objects used to test the behavior of endpoints in the flaskr app.
+
+Usage: test_flaskr.py
 
 Classes:
     QuestionTestCase()
@@ -22,7 +24,7 @@ from models import (
 
 
 class QuestionTestCase(unittest.TestCase):
-    """This class represents the test cases for the question endpoints
+    """This class represents the test cases for the question endpoints.
 
     Attributes:
         app: A flask app from the flaskr app
@@ -32,6 +34,7 @@ class QuestionTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        """Set-up for the QuestionTestCase."""
         self.app = app
         self.client = self.app.test_client
         self.db_name = "trivia_test"
@@ -39,7 +42,7 @@ class QuestionTestCase(unittest.TestCase):
         setup_db(self.app, self.db_path)
 
     def tearDown(self):
-        """Executed after each test"""
+        """Executed after each test."""
 
     def test_get_questions_success(self):
         """Test successful retrieval of questions."""
@@ -53,8 +56,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertTrue(response.json.get("categories"))
 
     def test_get_questions_out_of_range_fail(self):
-        """Test failed question retrieval when page number is out of range"""
-
+        """Test failed question retrieval when page number is out of range."""
         total_pages = -(-Question.query.count() // QUESTIONS_PER_PAGE)
 
         response = self.client().get(f"questions?page={total_pages+1}")
@@ -64,8 +66,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Not Found")
 
     def test_search_questions_success(self):
-        """Test successful search of questions"""
-
+        """Test successful search of questions."""
         search = {
             "search_term": "what",
         }
@@ -95,8 +96,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertTrue(response.json.get("categories"))
 
     def test_create_question_success(self):
-        """Test successful creation of question"""
-
+        """Test successful creation of question."""
         new_question = {
             "question": "What's the answer to life the universe & everything?",
             "answer": "42",
@@ -140,8 +140,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Method Not Allowed")
 
     def test_patch_question_rating_success(self):
-        """Test successful changing of a question rating"""
-
+        """Test successful changing of a question rating."""
         question = Question.query.order_by(Question.id.desc()).first()
         question_id = question.id
         old_rating = question.rating
@@ -165,8 +164,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(question.rating, new_rating)
 
     def test_patch_question_rating_out_of_range_fail(self):
-        """Test failed question rating change when question does not exist"""
-
+        """Test failed question rating change when question does not exist."""
         question_id = Question.query.order_by(Question.id.desc()).first().id
 
         rating = {
@@ -182,8 +180,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Unprocessable Entity")
 
     def test_patch_question_rating_no_rating_fail(self):
-        """Test failed question rating change when no rating is given"""
-
+        """Test failed question rating change when no rating is given."""
         question_id = Question.query.order_by(Question.id.desc()).first().id
 
         response = self.client().patch(f"/questions/{question_id}")
@@ -193,8 +190,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Bad Request")
 
     def test_delete_question_success(self):
-        """Test successful deletion of question"""
-
+        """Test successful deletion of question."""
         question_id = Question.query.order_by(Question.id.desc()).first().id
 
         response = self.client().delete(f"/questions/{question_id}")
@@ -207,8 +203,7 @@ class QuestionTestCase(unittest.TestCase):
         self.assertIsNone(question)
 
     def test_delete_question_out_of_range_fail(self):
-        """Test failed questions deletion when question does not exist"""
-
+        """Test failed questions deletion when question does not exist."""
         question_id = Question.query.order_by(Question.id.desc()).first().id
 
         response = self.client().delete(f"/questions/{question_id+1}")
@@ -235,7 +230,7 @@ class QuestionTestCase(unittest.TestCase):
 
 
 class CategoryTestCase(unittest.TestCase):
-    """This class represents the test cases for the category endpoints
+    """This class represents the test cases for the category endpoints.
 
     Attributes:
         app: A flask app from the flaskr app
@@ -245,6 +240,7 @@ class CategoryTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        """Set-up for the CategoryTestCase."""
         self.app = app
         self.client = self.app.test_client
         self.db_name = "trivia_test"
@@ -252,7 +248,7 @@ class CategoryTestCase(unittest.TestCase):
         setup_db(self.app, self.db_path)
 
     def tearDown(self):
-        """Executed after each test"""
+        """Executed after each test."""
 
     def test_get_categories_success(self):
         """Test successful retrieval of categories."""
@@ -312,11 +308,11 @@ class CategoryTestCase(unittest.TestCase):
         self.assertTrue(response.json.get("categories"))
 
     def test_get_category_questions_out_of_range_fail(self):
-        """Test failed category question retrieval when page is out of range"""
-
-        total_pages = -(-Question.query.filter(
-            Question.category_id == 1
-        ).count() // QUESTIONS_PER_PAGE)
+        """Test failed category question retrieval if page is out of range."""
+        total_pages = -(
+            -Question.query.filter(Question.category_id == 1).count()
+            // QUESTIONS_PER_PAGE
+        )
 
         response = self.client().get(
             f"/categories/1/questions?page={total_pages+1}"
@@ -352,7 +348,7 @@ class CategoryTestCase(unittest.TestCase):
 
 
 class QuizTestCase(unittest.TestCase):
-    """This class represents the test cases for the quiz endpoints
+    """This class represents the test cases for the quiz endpoints.
 
     Attributes:
         app: A flask app from the flaskr app
@@ -362,6 +358,7 @@ class QuizTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        """Set-up for the QuizTestCase."""
         self.app = app
         self.client = self.app.test_client
         self.db_name = "trivia_test"
@@ -369,11 +366,10 @@ class QuizTestCase(unittest.TestCase):
         setup_db(self.app, self.db_path)
 
     def tearDown(self):
-        """Executed after each test"""
+        """Executed after each test."""
 
     def test_create_quiz_success(self):
-        """Test the successful creation of a quiz"""
-
+        """Test the successful creation of a quiz."""
         questions = Question.query.filter(Question.category_id == 1).all()
         question_ids = [question.id for question in questions]
         question_id = question_ids.pop()
@@ -391,8 +387,7 @@ class QuizTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("question")["id"], question_id)
 
     def test_create_quiz_no_category_success(self):
-        """Test the successful creation of a quiz without a category"""
-
+        """Test the successful creation of a quiz without a category."""
         quiz = {
             "quiz_category_id": 0,
             "previous_question_ids": [],
@@ -405,8 +400,7 @@ class QuizTestCase(unittest.TestCase):
         self.assertTrue(response.json.get("question"))
 
     def test_create_quiz_no_question_success(self):
-        """Test the successful creation of a quiz that returned no question"""
-
+        """Test the successful creation of a quiz that returned no question."""
         questions = Question.query.filter(Question.category_id == 1).all()
         question_ids = [question.id for question in questions]
 
@@ -455,7 +449,7 @@ class QuizTestCase(unittest.TestCase):
 
 
 class UserTestCase(unittest.TestCase):
-    """This class represents the test cases for the user endpoints
+    """This class represents the test cases for the user endpoints.
 
     Attributes:
         app: A flask app from the flaskr app
@@ -465,6 +459,7 @@ class UserTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        """Set-up for the UserTestCase."""
         self.app = app
         self.client = self.app.test_client
         self.db_name = "trivia_test"
@@ -472,7 +467,7 @@ class UserTestCase(unittest.TestCase):
         setup_db(self.app, self.db_path)
 
     def tearDown(self):
-        """Executed after each test"""
+        """Executed after each test."""
 
     def test_get_users_success(self):
         """Test successful retrieval of users."""
@@ -522,8 +517,7 @@ class UserTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Method Not Allowed")
 
     def test_patch_user_score_success(self):
-        """Test successful changing of a user's score"""
-
+        """Test successful changing of a user's score."""
         user = User.query.order_by(User.id.desc()).first()
         user_id = user.id
         old_score = user.score
@@ -544,8 +538,7 @@ class UserTestCase(unittest.TestCase):
         self.assertGreaterEqual(user.score, 2)
 
     def test_patch_user_score_out_of_range_fail(self):
-        """Test failed user score change when user does not exist"""
-
+        """Test failed user score change when user does not exist."""
         user_id = User.query.order_by(User.id.desc()).first().id
 
         score = {
@@ -559,8 +552,7 @@ class UserTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Unprocessable Entity")
 
     def test_patch_user_score_no_score_fail(self):
-        """Test failed user score change when no score is given"""
-
+        """Test failed user score change when no score is given."""
         user_id = User.query.order_by(User.id.desc()).first().id
 
         response = self.client().patch(f"/users/{user_id}")
