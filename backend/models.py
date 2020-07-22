@@ -17,12 +17,12 @@ from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 
-DB_DIALECT = 'postgresql'
-DB_HOST = 'localhost'
+DB_DIALECT = "postgresql"
+DB_HOST = "localhost"
 DB_PORT = 5432
-DB_NAME = 'trivia'
+DB_NAME = "trivia"
 
-DB_PATH = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}'
+DB_PATH = f"{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 db = SQLAlchemy()
 
@@ -34,9 +34,9 @@ def setup_db(app, database_path=DB_PATH):
         app: A flask app
         database_path: A str representing the location of the db
     """
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_path
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['UPLOAD_FOLDER'] = '../frontend/public'
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["UPLOAD_FOLDER"] = "../frontend/public"
     db.app = app
     db.init_app(app)
     db.create_all()
@@ -54,12 +54,12 @@ class Question(db.Model):
         difficulty: An int representing the difficulty of the question
     """
 
-    __tablename__ = 'questions'
+    __tablename__ = "questions"
 
     id = Column(Integer, primary_key=True)
     question = Column(String)
     answer = Column(String)
-    category_id = Column(Integer, ForeignKey('categories.id'))
+    category_id = Column(Integer, ForeignKey("categories.id"))
     rating = Column(Integer)
     difficulty = Column(Integer)
 
@@ -91,12 +91,12 @@ class Question(db.Model):
             question: A dict representing the question object
         """
         question = {
-            'id': self.id,
-            'question': self.question,
-            'answer': self.answer,
-            'category_id': self.category_id,
-            'rating': self.rating,
-            'difficulty': self.difficulty,
+            "id": self.id,
+            "question": self.question,
+            "answer": self.answer,
+            "category_id": self.category_id,
+            "rating": self.rating,
+            "difficulty": self.difficulty,
         }
         return question
 
@@ -109,11 +109,11 @@ class Category(db.Model):
         name: A str representing the name of the category
     """
 
-    __tablename__ = 'categories'
+    __tablename__ = "categories"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    questions = relationship('Question', backref='category')
+    questions = relationship("Question", backref="category")
 
     def __init__(self, name):
         self.name = name
@@ -130,8 +130,8 @@ class Category(db.Model):
             category: A dict representing the category object
         """
         category = {
-            'id': self.id,
-            'name': self.name,
+            "id": self.id,
+            "name": self.name,
         }
         return category
 
@@ -145,7 +145,7 @@ class User(db.Model):
         score: An int representing the lifetime score of a user
     """
 
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
     username = Column(String)
@@ -171,8 +171,8 @@ class User(db.Model):
             user: A dict representing the user object
         """
         user = {
-            'id': self.id,
-            'username': self.username,
-            'score': self.score,
+            "id": self.id,
+            "username": self.username,
+            "score": self.score,
         }
         return user

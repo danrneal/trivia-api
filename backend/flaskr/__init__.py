@@ -56,16 +56,16 @@ def after_request(response):
     """
 
     response.headers.add(
-        'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
+        "Access-Control-Allow-Headers", "Content-Type, Authorization, true"
     )
     response.headers.add(
-        'Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS'
+        "Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS"
     )
 
     return response
 
 
-@app.route('/questions', methods=['GET'])
+@app.route("/questions", methods=["GET"])
 def get_questions():
     """Route handler for endpoint showing questions for a given page
 
@@ -74,7 +74,7 @@ def get_questions():
     """
 
     questions = Question.query.order_by(Question.id).all()
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
     current_questions = paginate_questions(questions, page)
 
     if len(current_questions) == 0:
@@ -83,18 +83,20 @@ def get_questions():
     categories = Category.query.order_by(Category.id).all()
     categories = {category.id: category.name for category in categories}
 
-    response = jsonify({
-        'success': True,
-        'questions': current_questions,
-        'total_questions': len(questions),
-        'current_category_id': None,
-        'categories': categories,
-    })
+    response = jsonify(
+        {
+            "success": True,
+            "questions": current_questions,
+            "total_questions": len(questions),
+            "current_category_id": None,
+            "categories": categories,
+        }
+    )
 
     return response
 
 
-@app.route('/questions', methods=['POST'])
+@app.route("/questions", methods=["POST"])
 def create_question():
     """Route handler for endpoint to create a questoin
 
@@ -105,14 +107,18 @@ def create_question():
 
     try:
 
-        search_term = request.json.get('search_term')
+        search_term = request.json.get("search_term")
 
         if search_term is not None:
 
-            questions = Question.query.filter(
-                Question.question.ilike(f'%{search_term}%')
-            ).order_by(Question.id).all()
-            page = request.args.get('page', 1, type=int)
+            questions = (
+                Question.query.filter(
+                    Question.question.ilike(f"%{search_term}%")
+                )
+                .order_by(Question.id)
+                .all()
+            )
+            page = request.args.get("page", 1, type=int)
             current_questions = paginate_questions(questions, page)
 
             categories = Category.query.order_by(Category.id).all()
@@ -121,30 +127,31 @@ def create_question():
                 for category in categories
             }
 
-            response = jsonify({
-                'success': True,
-                'questions': current_questions,
-                'total_questions': len(questions),
-                'current_category_id': None,
-                'categories': categories,
-            })
+            response = jsonify(
+                {
+                    "success": True,
+                    "questions": current_questions,
+                    "total_questions": len(questions),
+                    "current_category_id": None,
+                    "categories": categories,
+                }
+            )
 
         else:
 
             question = Question(
-                question=request.json.get('question'),
-                answer=request.json.get('answer'),
-                category_id=request.json.get('category_id'),
-                rating=request.json.get('rating'),
-                difficulty=request.json.get('difficulty'),
+                question=request.json.get("question"),
+                answer=request.json.get("answer"),
+                category_id=request.json.get("category_id"),
+                rating=request.json.get("rating"),
+                difficulty=request.json.get("difficulty"),
             )
 
             question.insert()
 
-            response = jsonify({
-                'success': True,
-                'created_question_id': question.id,
-            })
+            response = jsonify(
+                {"success": True, "created_question_id": question.id}
+            )
 
     except AttributeError:
         abort(400)
@@ -152,7 +159,7 @@ def create_question():
     return response
 
 
-@app.route('/questions/<int:question_id>', methods=['PATCH'])
+@app.route("/questions/<int:question_id>", methods=["PATCH"])
 def patch_question_rating(question_id):
     """Route handler for endpoint updating the rating of a single question
 
@@ -172,7 +179,7 @@ def patch_question_rating(question_id):
     try:
 
         old_rating = question.rating
-        rating = request.json.get('rating')
+        rating = request.json.get("rating")
 
         if rating is not None:
             question.rating = int(rating)
@@ -182,17 +189,19 @@ def patch_question_rating(question_id):
     except AttributeError:
         abort(400)
 
-    response = jsonify({
-        'success': True,
-        'updated_question_id': question_id,
-        'old_rating': old_rating,
-        'new_rating': question.rating,
-    })
+    response = jsonify(
+        {
+            "success": True,
+            "updated_question_id": question_id,
+            "old_rating": old_rating,
+            "new_rating": question.rating,
+        }
+    )
 
     return response
 
 
-@app.route('/questions/<int:question_id>', methods=['DELETE'])
+@app.route("/questions/<int:question_id>", methods=["DELETE"])
 def delete_question(question_id):
     """Route handler for endpoint to delete a single question
 
@@ -212,15 +221,12 @@ def delete_question(question_id):
 
     question.delete()
 
-    response = jsonify({
-        'success': True,
-        'deleted_question_id': question_id,
-    })
+    response = jsonify({"success": True, "deleted_question_id": question_id})
 
     return response
 
 
-@app.route('/categories', methods=['GET'])
+@app.route("/categories", methods=["GET"])
 def get_categories():
     """Route handler for endpoint showing all categories
 
@@ -231,15 +237,12 @@ def get_categories():
     categories = Category.query.order_by(Category.id).all()
     categories = {category.id: category.name for category in categories}
 
-    response = jsonify({
-        'success': True,
-        'categories': categories,
-    })
+    response = jsonify({"success": True, "categories": categories})
 
     return response
 
 
-@app.route('/categories', methods=['POST'])
+@app.route("/categories", methods=["POST"])
 def create_category():
     """Route handler for endpoint to create a category
 
@@ -247,29 +250,27 @@ def create_category():
         response: A json object containing the id of the category that was
             created
     """
-
-    name = request.form.get('name')
+    name = request.form.get("name")
 
     if name is not None:
 
-        icon = request.files.get('icon')
+        icon = request.files.get("icon")
 
         if icon is not None:
 
-            if icon.content_type != 'image/svg+xml':
+            if icon.content_type != "image/svg+xml":
                 abort(400)
 
             ext = os.path.splitext(icon.filename)[1]
             filename = secure_filename(name.lower() + ext)
-            icon.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            icon.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
         category = Category(name=name)
         category.insert()
 
-        response = jsonify({
-            'success': True,
-            'created_category_id': category.id,
-        })
+        response = jsonify(
+            {"success": True, "created_category_id": category.id}
+        )
 
     else:
         abort(400)
@@ -277,7 +278,7 @@ def create_category():
     return response
 
 
-@app.route('/categories/<int:category_id>/questions')
+@app.route("/categories/<int:category_id>/questions")
 def get_category_questions(category_id):
     """Route handler for endpoint showing all questions for a specific category
 
@@ -288,11 +289,12 @@ def get_category_questions(category_id):
     Returns:
         response: A json object representing questions for a specific category
     """
-
-    questions = Question.query.filter(
-        Question.category_id == category_id
-    ).order_by(Question.id).all()
-    page = request.args.get('page', 1, type=int)
+    questions = (
+        Question.query.filter(Question.category_id == category_id)
+        .order_by(Question.id)
+        .all()
+    )
+    page = request.args.get("page", 1, type=int)
     current_questions = paginate_questions(questions, page)
 
     if len(current_questions) == 0:
@@ -301,18 +303,20 @@ def get_category_questions(category_id):
     categories = Category.query.order_by(Category.id).all()
     categories = {category.id: category.name for category in categories}
 
-    response = jsonify({
-        'success': True,
-        'questions': current_questions,
-        'total_questions': len(questions),
-        'current_category_id': category_id,
-        'categories': categories,
-    })
+    response = jsonify(
+        {
+            "success": True,
+            "questions": current_questions,
+            "total_questions": len(questions),
+            "current_category_id": category_id,
+            "categories": categories,
+        }
+    )
 
     return response
 
 
-@app.route('/quizzes', methods=['POST'])
+@app.route("/quizzes", methods=["POST"])
 def create_quiz():
     """Route handler for endpoint starting a new quiz
 
@@ -323,8 +327,8 @@ def create_quiz():
 
     try:
 
-        quiz_category_id = request.json.get('quiz_category_id')
-        previous_question_ids = request.json.get('previous_question_ids')
+        quiz_category_id = request.json.get("quiz_category_id")
+        previous_question_ids = request.json.get("previous_question_ids")
         questions = Question.query.filter(
             ~Question.id.in_(previous_question_ids)
         )
@@ -341,10 +345,7 @@ def create_quiz():
         else:
             question = None
 
-        response = jsonify({
-            'success': True,
-            'question': question,
-        })
+        response = jsonify({"success": True, "question": question})
 
     except AttributeError:
         abort(400)
@@ -352,7 +353,7 @@ def create_quiz():
     return response
 
 
-@app.route('/users', methods=['GET'])
+@app.route("/users", methods=["GET"])
 def get_users():
     """Route handler for endpoint showing all users
 
@@ -363,15 +364,12 @@ def get_users():
     users = User.query.order_by(User.id).all()
     users = {user.id: user.username for user in users}
 
-    response = jsonify({
-        'success': True,
-        'users': users,
-    })
+    response = jsonify({"success": True, "users": users})
 
     return response
 
 
-@app.route('/users', methods=['POST'])
+@app.route("/users", methods=["POST"])
 def create_user():
     """Route handler for endpoint to create a user
 
@@ -381,17 +379,11 @@ def create_user():
 
     try:
 
-        user = User(
-            username=request.json.get('username'),
-            score=0,
-        )
+        user = User(username=request.json.get("username"), score=0,)
 
         user.insert()
 
-        response = jsonify({
-            'success': True,
-            'created_user_id': user.id,
-        })
+        response = jsonify({"success": True, "created_user_id": user.id})
 
     except AttributeError:
         abort(400)
@@ -399,7 +391,7 @@ def create_user():
     return response
 
 
-@app.route('/users/<int:user_id>', methods=['PATCH'])
+@app.route("/users/<int:user_id>", methods=["PATCH"])
 def patch_user_score(user_id):
     """Route handler for endpoint updating the score of a single user
 
@@ -419,7 +411,7 @@ def patch_user_score(user_id):
     try:
 
         old_score = user.score
-        score = request.json.get('score')
+        score = request.json.get("score")
 
         if score is not None:
             user.score += int(score)
@@ -429,12 +421,14 @@ def patch_user_score(user_id):
     except AttributeError:
         abort(400)
 
-    response = jsonify({
-        'success': True,
-        'updated_user_id': user_id,
-        'old_score': old_score,
-        'new_score': user.score,
-    })
+    response = jsonify(
+        {
+            "success": True,
+            "updated_user_id": user_id,
+            "old_score": old_score,
+            "new_score": user.score,
+        }
+    )
 
     return response
 
@@ -449,11 +443,9 @@ def bad_request(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 400,
-        'message': 'Bad Request',
-    })
+    response = jsonify(
+        {"success": False, "error_code": 400, "message": "Bad Request"}
+    )
     return response, 400
 
 
@@ -467,11 +459,9 @@ def not_found(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 404,
-        'message': 'Not Found',
-    })
+    response = jsonify(
+        {"success": False, "error_code": 404, "message": "Not Found"}
+    )
     return response, 404
 
 
@@ -485,11 +475,9 @@ def method_not_allowed(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 405,
-        'message': 'Method Not Allowed',
-    })
+    response = jsonify(
+        {"success": False, "error_code": 405, "message": "Method Not Allowed"}
+    )
     return response, 405
 
 
@@ -503,11 +491,13 @@ def unprocessable_entity(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 422,
-        'message': 'Unprocessable Entity',
-    })
+    response = jsonify(
+        {
+            "success": False,
+            "error_code": 422,
+            "message": "Unprocessable Entity",
+        }
+    )
     return response, 422
 
 
@@ -521,9 +511,11 @@ def internal_server_error(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 500,
-        'message': 'Internal Server Error',
-    })
+    response = jsonify(
+        {
+            "success": False,
+            "error_code": 500,
+            "message": "Internal Server Error",
+        }
+    )
     return response, 500
