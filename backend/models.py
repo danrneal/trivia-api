@@ -13,9 +13,9 @@ Classes:
     Category()
 """
 
-from sqlalchemy import Column, String, Integer, ForeignKey
-from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 DB_DIALECT = "postgresql"
 DB_HOST = "localhost"

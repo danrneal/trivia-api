@@ -8,9 +8,16 @@ Classes:
 """
 
 import unittest
-from flaskr import app, QUESTIONS_PER_PAGE
+
+from flaskr import QUESTIONS_PER_PAGE, app
 from models import (
-    DB_DIALECT, DB_HOST, DB_PORT, setup_db, Question, Category, User
+    DB_DIALECT,
+    DB_HOST,
+    DB_PORT,
+    Category,
+    Question,
+    User,
+    setup_db,
 )
 
 

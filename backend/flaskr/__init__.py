@@ -13,11 +13,12 @@ Attributes:
 
 import os
 import random
-from flask import Flask, request, abort, jsonify
+
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from models import setup_db, Question, Category, User
+
+from models import Category, Question, User, setup_db
 
 QUESTIONS_PER_PAGE = 10
 
