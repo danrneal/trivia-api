@@ -121,8 +121,7 @@ def create_question():
 
             categories = Category.query.order_by(Category.id).all()
             categories = {
-                category.id: category.name
-                for category in categories
+                category.id: category.name for category in categories
             }
 
             response = jsonify(
