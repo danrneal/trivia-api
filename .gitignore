@@ -1,7 +1,5 @@
-.history
-.vscode
+__pycache__/
+*.pyc
 .env
-env
-venv
-__pycache__
-node_modules
+env/
+node_modules/
