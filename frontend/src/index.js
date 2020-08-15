@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './stylesheets/index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import './stylesheets/index.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -11,5 +11,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-
- //"start": "HOST='127.0.0.1' PORT='5000' react-scripts start",
+//"start": "HOST='127.0.0.1' PORT='5000' react-scripts start",

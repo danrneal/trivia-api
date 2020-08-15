@@ -48,7 +48,7 @@
 .answer-holder {
   font-size: 25px;
   height: 25px;
-  margin: 5px 0px;
+  margin: 5px 0;
 }
 
 .show-answer {
@@ -57,7 +57,7 @@
   background-color: dodgerblue;
   color: white;
   padding: 3px 5px;
-  margin-left: 0px !important;
+  margin-left: 0 !important;
 }
 
 span.page-num {

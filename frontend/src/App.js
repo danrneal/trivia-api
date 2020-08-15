@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from 'react-router-dom'
-
-import './stylesheets/App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import FormView from './components/FormView';
-import QuestionView from './components/QuestionView';
 import Header from './components/Header';
+import QuestionView from './components/QuestionView';
 import QuizView from './components/QuizView';
-
+import './stylesheets/App.css';
 
 class App extends Component {
   render() {
@@ -27,7 +21,6 @@ class App extends Component {
         </Router>
       </div>
     );
-
   }
 }
 

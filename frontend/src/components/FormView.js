@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
 import $ from 'jquery';
-
+import React, { Component } from 'react';
 import '../stylesheets/FormView.css';
 
 class FormView extends Component {
@@ -13,8 +12,8 @@ class FormView extends Component {
       difficulty: 1,
       categoryId: 1,
       categories: {},
-      username: ''
-    }
+      username: '',
+    };
   }
 
   componentDidMount() {
@@ -22,14 +21,14 @@ class FormView extends Component {
       url: `/categories`,
       type: 'GET',
       success: (result) => {
-        this.setState({ categories: result.categories })
+        this.setState({ categories: result.categories });
         return;
       },
       error: (error) => {
-        alert('Unable to load categories. Please try your request again')
+        alert('Unable to load categories. Please try your request again');
         return;
-      }
-    })
+      },
+    });
   }
 
   submitQuestion = (event) => {
@@ -44,10 +43,10 @@ class FormView extends Component {
         answer: this.state.answer,
         rating: this.state.rating,
         difficulty: this.state.difficulty,
-        category_id: this.state.categoryId
+        category_id: this.state.categoryId,
       }),
       xhrFields: {
-        withCredentials: true
+        withCredentials: true,
       },
       crossDomain: true,
       success: (result) => {
@@ -55,11 +54,11 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to add question. Please try your request again')
+        alert('Unable to add question. Please try your request again');
         return;
-      }
-    })
-  }
+      },
+    });
+  };
 
   submitCategory = (event) => {
     event.preventDefault();
@@ -72,7 +71,7 @@ class FormView extends Component {
       data: data,
       processData: false,
       xhrFields: {
-        withCredentials: true
+        withCredentials: true,
       },
       crossDomain: true,
       success: (result) => {
@@ -80,11 +79,11 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to add category. Please try your request again')
+        alert('Unable to add category. Please try your request again');
         return;
-      }
-    })
-  }
+      },
+    });
+  };
 
   submitUser = (event) => {
     event.preventDefault();
@@ -94,10 +93,10 @@ class FormView extends Component {
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
-        username: this.state.username
+        username: this.state.username,
       }),
       xhrFields: {
-        withCredentials: true
+        withCredentials: true,
       },
       crossDomain: true,
       success: (result) => {
@@ -105,21 +104,25 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to add user. Please try your request again')
+        alert('Unable to add user. Please try your request again');
         return;
-      }
-    })
-  }
+      },
+    });
+  };
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   render() {
     return (
       <div id="add-form">
         <h2>Add a New Trivia Question</h2>
-        <form className="form-view" id="add-question-form" onSubmit={this.submitQuestion}>
+        <form
+          className="form-view"
+          id="add-question-form"
+          onSubmit={this.submitQuestion}
+        >
           <label>
             Question
             <input type="text" name="question" onChange={this.handleChange} />
@@ -151,10 +154,12 @@ class FormView extends Component {
           <label>
             Category
             <select name="categoryId" onChange={this.handleChange}>
-              {Object.keys(this.state.categories).map(id => {
+              {Object.keys(this.state.categories).map((id) => {
                 return (
-                  <option key={id} value={id}>{this.state.categories[id]}</option>
-                )
+                  <option key={id} value={id}>
+                    {this.state.categories[id]}
+                  </option>
+                );
               })}
             </select>
           </label>
@@ -162,7 +167,11 @@ class FormView extends Component {
         </form>
         <hr></hr>
         <h2>Add a New Trivia Category</h2>
-        <form className="form-view" id="add-category-form" onSubmit={this.submitCategory}>
+        <form
+          className="form-view"
+          id="add-category-form"
+          onSubmit={this.submitCategory}
+        >
           <label>
             Name
             <input type="text" name="name" />
@@ -175,7 +184,11 @@ class FormView extends Component {
         </form>
         <hr></hr>
         <h2>Add a New Trivia User</h2>
-        <form className="form-view" id="add-user-form" onSubmit={this.submitUser}>
+        <form
+          className="form-view"
+          id="add-user-form"
+          onSubmit={this.submitUser}
+        >
           <label>
             Username
             <input type="text" name="username" onChange={this.handleChange} />
